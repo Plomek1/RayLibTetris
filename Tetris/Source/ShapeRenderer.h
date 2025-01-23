@@ -3,8 +3,6 @@
 #include "Component.h"
 
 #include <raylib.h>
-#include <vector>
-#include <initializer_list>
 
 namespace Tetris
 {
@@ -17,18 +15,19 @@ namespace Tetris
 			SQUARE,
 			RECTANGLE
 		};
+		//TODO: Add single float constructors
 		ShapeRenderer(GameObject& root);
-		ShapeRenderer(GameObject& root, ShapeType shapeType, std::initializer_list<float> dimensions);
-		ShapeRenderer(GameObject& root, ShapeType shapeType, std::initializer_list<float> dimensions, Color color);
+		ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions);
+		ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions, Color color);
 
 		void Update(const float deltaTime) override;
-
 
 		ShapeType shapeType;
 		Color color;
 
 	private:
-		bool ValidateValues(std::initializer_list<float>& values);
+		bool ValidateDimensions(std::vector<float>& dimensions);
+		void SetDefaultDimensions(std::vector<float>& dimensions);
 
 		std::vector<float> dimensions;
 	};

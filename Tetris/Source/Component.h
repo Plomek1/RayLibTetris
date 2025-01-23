@@ -13,8 +13,6 @@ namespace Tetris
 
 	protected:
 		Component(GameObject& root) : root(root) {}
-
-	private:
 		GameObject& root;
 	};
 }

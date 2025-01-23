@@ -21,7 +21,7 @@ namespace Tetris
 
 		unsigned int targetFps = 60;
 	
-		std::vector<GameObject> gameObjects;
+		std::vector<std::unique_ptr<GameObject>> gameObjects;
 	};
 }
 
