@@ -1,14 +1,7 @@
-#include <iostream>
-#include <raylib.h>
+#include "Game.h"
 
 int main()
 {
-	InitWindow(800, 800, "Tetris");
-
-	while (!WindowShouldClose())
-	{
-
-	}
-
-	CloseWindow();
+	Tetris::Game game;
+	game.StartGame();
 }
