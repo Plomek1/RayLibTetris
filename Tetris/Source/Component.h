@@ -14,6 +14,8 @@ namespace Tetris
 	protected:
 		Component(GameObject& root) : root(root) {}
 		GameObject& root;
+
+		friend class GameObject;
 	};
 }
 

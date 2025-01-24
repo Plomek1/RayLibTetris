@@ -1,6 +1,5 @@
 #include "Game.h"
 
-#include "GameObject.h"
 #include <raylib.h>
 
 #include "ShapeRenderer.h"
@@ -12,10 +11,16 @@ namespace Tetris
 		InitWindow(800, 800, "Tetris");
 		SetTargetFPS(targetFps);
 
-		gameObjects.push_back(std::make_unique<GameObject>(500, 300));
-		gameObjects.push_back(std::make_unique<GameObject>(500, 600));
-		gameObjects[0]->AddComponent<ShapeRenderer>(ShapeRenderer::RECTANGLE, std::vector<float>{50, 10}, YELLOW);
-		gameObjects[1]->AddComponent<ShapeRenderer>();
+		GameObject& go1 = CreateGameObject();
+		GameObject& go2 = CreateGameObject(500, 300);
+		GameObject& go3 = CreateGameObject(VPVector2(50, 600));
+
+		go1.AddComponent<ShapeRenderer>(ShapeRenderer::RECTANGLE, std::vector<float>{50, 10}, YELLOW);
+		go2.AddComponent<ShapeRenderer>(ShapeRenderer::SQUARE, 20, BLUE);
+		go3.AddComponent<ShapeRenderer>();
+
+
+		//DestroyGameObject(go2);
 		
 		GameLoop();
 	}
@@ -42,6 +47,15 @@ namespace Tetris
 	void Game::StopGame()
 	{
 		CloseWindow();
+	}
+
+	void Game::DestroyGameObject(GameObject& gameObject)
+	{
+		GameObject* targetObject = &gameObject;
+		gameObjects.erase(std::remove_if(gameObjects.begin(), gameObjects.end(),
+			[targetObject](const std::unique_ptr<GameObject>& obj) {
+				return obj.get() == targetObject;
+			}), gameObjects.end());
 	}
 
 	Game::Game()  = default;

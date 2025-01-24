@@ -8,6 +8,7 @@
 
 namespace Tetris
 {
+	class Game;
 	class Component;
 
 	template <typename T>
@@ -16,27 +17,31 @@ namespace Tetris
 	class GameObject
 	{
 	public:
-		GameObject();
-		GameObject(Vector2 position);
-		GameObject(float posX, float posY);
-		~GameObject();
 
 		template <ComponentChild C>
-		inline void AddComponent() { components.push_back(std::make_unique<C>(*this)); }
+		inline void AddComponent() 
+		{ components.push_back(std::unique_ptr<Component>(new C(*this))); }
 		
 		template <ComponentChild C, typename... Args>
-		inline void AddComponent(Args... args) { 
-			
-			components.push_back(std::make_unique<C>(*this, args...)); 
-		}
+		inline void AddComponent(Args&&... args) 
+		{ components.push_back(std::unique_ptr<Component>(new C(*this, args...))); }
 
 		virtual void Update(const float deltaTime);
 
-		Vector2 position;
+		VPVector2 position;
 
 	private:
+		//Add object management
+		GameObject(Game& game);
+		GameObject(Game& game, VPVector2 position);
+		GameObject(Game& game, float posX, float posY);
+
 		GameObject(const GameObject&) = delete;
 
+		Game& game;
+
 		std::vector<std::unique_ptr<Component>> components;
+
+		friend class Game;
 	};
 }

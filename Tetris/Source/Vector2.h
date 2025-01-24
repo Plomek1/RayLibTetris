@@ -1,10 +1,10 @@
 #pragma once
 namespace Tetris
 {
-	struct Vector2
+	struct VPVector2
 	{
-		Vector2();
-		Vector2(float x, float y);
+		VPVector2();
+		VPVector2(float x, float y);
 
 		float x = 0;
 		float y = 0;

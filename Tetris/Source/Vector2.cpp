@@ -2,7 +2,7 @@
 
 namespace Tetris
 {
-	Vector2::Vector2() {}
-	Vector2::Vector2(float x, float y) : x(x), y(y) {}
+	VPVector2::VPVector2() {}
+	VPVector2::VPVector2(float x, float y) : x(x), y(y) {}
 }
 

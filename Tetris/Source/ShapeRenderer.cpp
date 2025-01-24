@@ -1,5 +1,7 @@
 #include "ShapeRenderer.h"
 
+#include <iostream>
+
 namespace Tetris
 {
 	void ShapeRenderer::Update(const float deltaTime)
@@ -20,30 +22,35 @@ namespace Tetris
 			break;
 		}
 	}
-	ShapeRenderer::ShapeRenderer(GameObject& root) : Component(root), shapeType(CIRCLE), dimensions(std::vector<float>{1}), color(WHITE) {}
+	ShapeRenderer::ShapeRenderer(GameObject& root) 
+		: Component(root), shapeType(CIRCLE), dimensions(std::vector<float>{1}), color(WHITE) {}
 
-	ShapeRenderer::ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions) : Component(root), shapeType(shapeType), color(WHITE)
+	ShapeRenderer::ShapeRenderer(GameObject& root, ShapeType shapeType, float dimension) 
+		: Component(root), shapeType(shapeType), dimensions(std::vector<float>{dimension})
+	{ Init(dimensions); }
+
+	ShapeRenderer::ShapeRenderer(GameObject& root, ShapeType shapeType, float dimension, Color color)
+		: Component(root), shapeType(shapeType), dimensions(std::vector<float>{dimension}), color(color) 
+	{ Init(dimensions); }
+
+	ShapeRenderer::ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions) 
+		: Component(root), shapeType(shapeType), color(WHITE) 
+	{ Init(dimensions); }
+
+	ShapeRenderer::ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions, Color color) 
+		: Component(root), shapeType(shapeType), color(color) 
+	{ Init(dimensions); }
+
+	void ShapeRenderer::Init(std::vector<float>& dimensionsInput)
 	{
-		if (!ValidateDimensions(dimensions))
+		if (!ValidateDimensions(dimensionsInput))
 		{
 			std::cerr << "Wrong dimensions count used in ShapeRenderer";
-			SetDefaultDimensions(this->dimensions);
+			SetDefaultDimensions(dimensions);
 			return;
 		}
-		this->dimensions = dimensions;
+		dimensions = dimensionsInput;
 	}
-
-	ShapeRenderer::ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions, Color color) : Component(root), shapeType(shapeType), color(color)
-	{
-		if (!ValidateDimensions(dimensions))
-		{
-			std::cerr << "Wrong dimensions count used in ShapeRenderer";
-			SetDefaultDimensions(this->dimensions);
-			return;
-		}
-		this->dimensions = dimensions;
-	}
-
 
 	bool ShapeRenderer::ValidateDimensions(std::vector<float>& dimensions)
 	{
