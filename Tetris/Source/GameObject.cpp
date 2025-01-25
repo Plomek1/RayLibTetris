@@ -11,8 +11,28 @@ namespace Tetris
 			components[i]->Update(deltaTime);
 	}
 
-	GameObject::GameObject(Game& game) : game(game) {}
-	GameObject::GameObject(Game& game, VPVector2 position) : game(game), position(position) {}
-	GameObject::GameObject(Game& game, float posX, float posY) : game(game), position(VPVector2(posX, posY)) {}
+	GameObject& GameObject::Create()
+	{ return game.CreateGameObject(); }	
+	
+	GameObject& GameObject::Create(std::string name)
+	{ return game.CreateGameObject(name); }
+
+	GameObject& GameObject::Create(VPVector2 position)
+	{ return game.CreateGameObject(position); }
+
+	GameObject& GameObject::Create(std::string name, VPVector2 position)
+	{ return game.CreateGameObject(name, position); }
+
+	void GameObject::Destroy(GameObject & gameObject)
+	{ game.DestroyGameObject(gameObject); }
+
+	GameObject::GameObject(Game& game, int id, std::string name)
+		: game(game), id(id), name(name) {}
+	
+	GameObject::GameObject(Game& game, int id, std::string name, VPVector2 position) 
+		: game(game), id(id), name(name), position(position) {}
+	
+	GameObject::GameObject(Game& game, int id, std::string name, float posX, float posY) 
+		: game(game), id(id), name(name), position(VPVector2(posX, posY)) {}
 }
 

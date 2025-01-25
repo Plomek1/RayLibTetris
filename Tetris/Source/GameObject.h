@@ -2,6 +2,7 @@
 
 #include "Vector2.h"
 
+#include <string>
 #include <vector>
 #include <memory>
 #include <concepts>
@@ -17,7 +18,6 @@ namespace Tetris
 	class GameObject
 	{
 	public:
-
 		template <ComponentChild C>
 		inline void AddComponent() 
 		{ components.push_back(std::unique_ptr<Component>(new C(*this))); }
@@ -28,16 +28,23 @@ namespace Tetris
 
 		virtual void Update(const float deltaTime);
 
+		std::string name;
 		VPVector2 position;
 
+		GameObject& Create();
+		GameObject& Create(std::string name);
+		GameObject& Create(VPVector2 position);
+		GameObject& Create(std::string name, VPVector2 position);
+		void Destroy(GameObject& gameObject);
+
 	private:
-		//Add object management
-		GameObject(Game& game);
-		GameObject(Game& game, VPVector2 position);
-		GameObject(Game& game, float posX, float posY);
+		GameObject(Game& game, int id, std::string name);
+		GameObject(Game& game, int id, std::string name, VPVector2 position);
+		GameObject(Game& game, int id, std::string name, float posX, float posY);
 
 		GameObject(const GameObject&) = delete;
 
+		unsigned const int id;
 		Game& game;
 
 		std::vector<std::unique_ptr<Component>> components;

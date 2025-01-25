@@ -16,13 +16,10 @@ namespace Tetris
 		void StartGame();
 		void StopGame();
 
-		template <typename... Args>
-		inline GameObject& CreateGameObject(Args&&... args)
-		{ 
-			GameObject* go = new GameObject(*this, args...);
-			gameObjects.push_back(std::unique_ptr<GameObject>(go));
-			return *go;
-		}
+		GameObject& CreateGameObject();
+		GameObject& CreateGameObject(std::string name);
+		GameObject& CreateGameObject(VPVector2 position);
+		GameObject& CreateGameObject(std::string name, VPVector2 position);
 
 		void DestroyGameObject(GameObject& gameObject);
 

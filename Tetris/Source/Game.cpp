@@ -2,7 +2,7 @@
 
 #include <raylib.h>
 
-#include "ShapeRenderer.h"
+#include "SceneRoot.h"
 
 namespace Tetris
 {
@@ -11,19 +11,11 @@ namespace Tetris
 		InitWindow(800, 800, "Tetris");
 		SetTargetFPS(targetFps);
 
-		GameObject& go1 = CreateGameObject();
-		GameObject& go2 = CreateGameObject(500, 300);
-		GameObject& go3 = CreateGameObject(VPVector2(50, 600));
+		CreateGameObject("Root").AddComponent<SceneRoot>();
 
-		go1.AddComponent<ShapeRenderer>(ShapeRenderer::RECTANGLE, std::vector<float>{50, 10}, YELLOW);
-		go2.AddComponent<ShapeRenderer>(ShapeRenderer::SQUARE, 20, BLUE);
-		go3.AddComponent<ShapeRenderer>();
-
-
-		//DestroyGameObject(go2);
-		
 		GameLoop();
 	}
+
 
 	void Game::GameLoop()
 	{
@@ -44,19 +36,53 @@ namespace Tetris
 		StopGame();
 	}
 
-	void Game::StopGame()
+	#pragma region CreateGameObject Overloads
+
+	GameObject& Game::CreateGameObject()
 	{
-		CloseWindow();
+		int id = gameObjects.size();
+		std::string name = "Object " + std::to_string(id);
+		GameObject* go = new GameObject(*this, id, name, { 0, 0 });
+		gameObjects.push_back(std::unique_ptr<GameObject>(go));
+		
+		return *go;
 	}
 
-	void Game::DestroyGameObject(GameObject& gameObject)
+	GameObject& Game::CreateGameObject(std::string name)
 	{
-		GameObject* targetObject = &gameObject;
-		gameObjects.erase(std::remove_if(gameObjects.begin(), gameObjects.end(),
-			[targetObject](const std::unique_ptr<GameObject>& obj) {
-				return obj.get() == targetObject;
-			}), gameObjects.end());
+		int id = gameObjects.size();
+		GameObject* go = new GameObject(*this, id, name, { 0, 0 });
+		gameObjects.push_back(std::unique_ptr<GameObject>(go));
+
+		return *go;
 	}
+
+	GameObject& Game::CreateGameObject(VPVector2 position)
+	{
+		int id = gameObjects.size();
+		std::string name = "Object " + std::to_string(id);
+		GameObject* go = new GameObject(*this, id, name, position);
+		gameObjects.push_back(std::unique_ptr<GameObject>(go));
+
+		return *go;
+	}
+
+	GameObject& Game::CreateGameObject(std::string name, VPVector2 position)
+	{
+		int id = gameObjects.size();
+		GameObject* go = new GameObject(*this, id, name, position);
+		gameObjects.push_back(std::unique_ptr<GameObject>(go));
+
+		return *go;
+	}
+
+	#pragma endregion
+
+	void Game::DestroyGameObject(GameObject& gameObject)
+	{ gameObjects.erase(gameObjects.begin() + gameObject.id); }
+
+	void Game::StopGame()
+	{ CloseWindow(); }
 
 	Game::Game()  = default;
 	Game::~Game() = default;

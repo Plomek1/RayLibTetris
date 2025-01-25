@@ -38,7 +38,7 @@ namespace Tetris
 		void SetDefaultDimensions(std::vector<float>& dimensions);
 
 		std::vector<float> dimensions;
-		
+
 		friend class GameObject;
 	};
 
