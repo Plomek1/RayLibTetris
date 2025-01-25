@@ -9,16 +9,16 @@ namespace Tetris
 		switch (shapeType)
 		{
 		case CIRCLE:
-			DrawCircle(GetRoot().position.x, GetRoot().position.y, dimensions[0], color);
+			DrawCircle(root.position.x, root.position.y, dimensions[0], color);
 			break;
 
 		case SQUARE:
 
-			DrawRectangle(GetRoot().position.x, GetRoot().position.y, dimensions[0], dimensions[0], color);
+			DrawRectangle(root.position.x, root.position.y, dimensions[0], dimensions[0], color);
 			break;
 
 		case RECTANGLE:
-			DrawRectangle(GetRoot().position.x, GetRoot().position.y, dimensions[0], dimensions[1], color);
+			DrawRectangle(root.position.x, root.position.y, dimensions[0], dimensions[1], color);
 			break;
 		}
 	}

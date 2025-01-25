@@ -11,19 +11,19 @@ namespace Tetris
 			components[i]->Update(deltaTime);
 	}
 
-	GameObject& GameObject::Create()
+	GameObject& GameObject::Create() const
 	{ return game.CreateGameObject(); }	
 	
-	GameObject& GameObject::Create(std::string name)
+	GameObject& GameObject::Create(std::string name) const
 	{ return game.CreateGameObject(name); }
 
-	GameObject& GameObject::Create(VPVector2 position)
+	GameObject& GameObject::Create(VPVector2 position) const
 	{ return game.CreateGameObject(position); }
 
-	GameObject& GameObject::Create(std::string name, VPVector2 position)
+	GameObject& GameObject::Create(std::string name, VPVector2 position) const
 	{ return game.CreateGameObject(name, position); }
 
-	void GameObject::Destroy(GameObject & gameObject)
+	void GameObject::Destroy(GameObject & gameObject) const
 	{ game.DestroyGameObject(gameObject); }
 
 	GameObject::GameObject(Game& game, int id, std::string name)

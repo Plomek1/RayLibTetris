@@ -19,7 +19,7 @@ namespace Tetris
 	{
 	public:
 		template <ComponentChild C>
-		inline void AddComponent() 
+		inline void AddComponent()
 		{ components.push_back(std::unique_ptr<Component>(new C(*this))); }
 		
 		template <ComponentChild C, typename... Args>
@@ -31,11 +31,11 @@ namespace Tetris
 		std::string name;
 		VPVector2 position;
 
-		GameObject& Create();
-		GameObject& Create(std::string name);
-		GameObject& Create(VPVector2 position);
-		GameObject& Create(std::string name, VPVector2 position);
-		void Destroy(GameObject& gameObject);
+		GameObject& Create() const;
+		GameObject& Create(std::string name) const;
+		GameObject& Create(VPVector2 position) const;
+		GameObject& Create(std::string name, VPVector2 position) const;
+		void Destroy(GameObject& gameObject) const;
 
 	private:
 		GameObject(Game& game, int id, std::string name);

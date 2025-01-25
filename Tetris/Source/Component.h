@@ -7,13 +7,12 @@ namespace Tetris
 	class Component
 	{
 	public:
-		GameObject& GetRoot();
+		GameObject& root;
 
 		virtual void Update(const float deltaTime) abstract;
 
 	protected:
 		Component(GameObject& root) : root(root) {}
-		GameObject& root;
 	};
 }
 

@@ -2,13 +2,16 @@
 
 #include <raylib.h>
 
+#include "Globals.h"
 #include "SceneRoot.h"
+
+#include <iostream>
 
 namespace Tetris
 {
 	void Game::StartGame()
 	{
-		InitWindow(800, 800, "Tetris");
+		InitWindow(600, 800, "Tetris");
 		SetTargetFPS(targetFps);
 
 		CreateGameObject("Root").AddComponent<SceneRoot>();
@@ -16,24 +19,36 @@ namespace Tetris
 		GameLoop();
 	}
 
-
 	void Game::GameLoop()
 	{
+		Color bgColor = {20, 20, 20, 255};
+
 		while (!WindowShouldClose())
 		{
 			BeginDrawing();
-			ClearBackground(DARKGRAY);
+			ClearBackground(bgColor);
+			
+			UpdateGlobals();
 
 			//Update
 			float deltaTime = GetFrameTime();
 			for (size_t i = 0; i < gameObjects.size(); i++)
 				gameObjects[i]->Update(deltaTime);
-			
 
 			EndDrawing();
 		}
 		
+
 		StopGame();
+	}
+
+	void Game::UpdateGlobals()
+	{
+		VPVector2 windowSize = VPVector2{ (float)GetScreenWidth(), (float)GetScreenHeight() };
+		VPVector2 mousePos = VPVector2{ GetMousePosition() };
+
+		Globals::windowParameters.windowSize = windowSize;
+		Globals::windowParameters.mousePos = mousePos;
 	}
 
 	#pragma region CreateGameObject Overloads

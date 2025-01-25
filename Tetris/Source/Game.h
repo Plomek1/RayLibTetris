@@ -22,9 +22,10 @@ namespace Tetris
 		GameObject& CreateGameObject(std::string name, VPVector2 position);
 
 		void DestroyGameObject(GameObject& gameObject);
-
+		
 	private:
 		void GameLoop();
+		void UpdateGlobals();
 
 		unsigned int targetFps = 60;
 	
