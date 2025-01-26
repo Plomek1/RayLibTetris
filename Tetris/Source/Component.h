@@ -4,7 +4,7 @@
 
 namespace Tetris
 {
-	class Component
+	class Component : protected Object
 	{
 	public:
 		GameObject& root;
@@ -12,7 +12,7 @@ namespace Tetris
 		virtual void Update(const float deltaTime) abstract;
 
 	protected:
-		Component(GameObject& root) : root(root) {}
+		Component(Game& game, GameObject& root) : Object(game), root(root) {}
 	};
 }
 

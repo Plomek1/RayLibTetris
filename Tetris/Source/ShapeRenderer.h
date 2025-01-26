@@ -1,45 +1,39 @@
 #pragma once
 
 #include "Component.h"
+#include "Shapes.h"
 
-#include <raylib.h>
+#include <memory>
+#include <concepts>
 
 namespace Tetris
 {
+	template <typename T>
+	concept ShapeType = std::is_base_of<Shape, T>::value;
+
 	class ShapeRenderer : public Component
 	{
 	public:
-		enum ShapeType
-		{
-			CIRCLE,
-			SQUARE,
-			RECTANGLE
-		};
+		ShapeRenderer(Game& game, GameObject& root) : Component(game, root), shape(std::make_unique<Circle>()) {}
 
+		template <ShapeType S, typename... Args>
+		ShapeRenderer(GameObject& root, Args... args) : Component(root), shape(std::make_unique<S>(args...)) {}
+		
+		template <ShapeType S>
+		inline S& GetShape() const
+		{ return *static_cast<S*>(shape.get()); }
+		
+		template <ShapeType S, typename... Args>
+		inline S& SetShape(Args... args) 
+		{ 
+			this->shape = std::make_unique<S>(args...); 
+			return GetShape<S>();
+		}
 
-		void Update(const float deltaTime) override;
-
-		ShapeType shapeType;
-		Color color;
-
+		inline void Update(const float deltaTime) override { shape->Draw(root.position); }
 
 	private:
-		ShapeRenderer(GameObject& root);
-
-		ShapeRenderer(GameObject& root, ShapeType shapeType, float dimension);
-		ShapeRenderer(GameObject& root, ShapeType shapeType, float dimension, Color color);
-
-		ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions);
-		ShapeRenderer(GameObject& root, ShapeType shapeType, std::vector<float> dimensions, Color color);
-
-		void Init(std::vector<float>& dimensions);
-
-		bool ValidateDimensions(std::vector<float>& dimensions);
-		void SetDefaultDimensions(std::vector<float>& dimensions);
-
-		std::vector<float> dimensions;
-
-		friend class GameObject;
+		std::unique_ptr<Shape> shape;
 	};
 
 }

@@ -6,11 +6,10 @@ namespace Tetris
 	class TetrisGrid : public Component
 	{
 	public:
-
+		TetrisGrid(Game& game, GameObject& root) : Component(game, root) {}
 		void Update(float deltaTime) override;
 
 	private:
-		TetrisGrid(GameObject& root) : Component(root) {}
 
 		void DrawGrid();
 
@@ -18,8 +17,6 @@ namespace Tetris
 		unsigned const short gridHeight = 20;
 
 		bool drawGrid = true;
-	
-		friend class GameObject;
 	};
 }
 
