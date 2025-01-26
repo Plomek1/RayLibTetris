@@ -5,7 +5,7 @@
 
 #include <memory>
 #include <concepts>
-
+#include <iostream>
 namespace Tetris
 {
 	template <typename T>
@@ -16,21 +16,21 @@ namespace Tetris
 	public:
 		ShapeRenderer(Game& game, GameObject& root) : Component(game, root), shape(std::make_unique<Circle>()) {}
 
-		template <ShapeType S, typename... Args>
-		ShapeRenderer(GameObject& root, Args... args) : Component(root), shape(std::make_unique<S>(args...)) {}
+		template <ShapeType S>
+		ShapeRenderer(Game& game, GameObject& root, S&& shape) : Component(game, root), shape(std::make_unique<S>(shape)) {}
 		
 		template <ShapeType S>
 		inline S& GetShape() const
 		{ return *static_cast<S*>(shape.get()); }
 		
 		template <ShapeType S, typename... Args>
-		inline S& SetShape(Args... args) 
+		inline S& SetShape(Args&&... args) 
 		{ 
-			this->shape = std::make_unique<S>(args...); 
+			this->shape = std::make_unique<S>(std::forward<Args>(args)...); 
 			return GetShape<S>();
 		}
 
-		inline void Update(const float deltaTime) override { shape->Draw(root.position); }
+		inline void Update(const float deltaTime) override { shape->Draw(root.position); std::cout << "Alive" << std::endl; }
 
 	private:
 		std::unique_ptr<Shape> shape;

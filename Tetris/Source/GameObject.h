@@ -18,19 +18,23 @@ namespace Tetris
 	{
 	public:
 		template <ComponentChild C>
-		inline C& AddComponent()
-		{ 
-			auto component = std::unique_ptr<Component>(new C(game, *this));
-			components.push_back(std::move(component)); 
-			return *static_cast<C*>(components.back().get());
+		inline std::weak_ptr<C> AddComponent()
+		{
+			auto component = std::make_shared<C>(game, *this);
+			std::weak_ptr<C> componentWeak = component;
+
+			components.push_back(std::move(component));
+			return componentWeak;
 		}
 		
 		template <ComponentChild C, typename... Args>
-		inline C& AddComponent(Args&&... args) 
+		inline std::weak_ptr<C> AddComponent(Args&&... args) 
 		{
-			auto component = std::unique_ptr<Component>(new C(game, *this, args...));
+			auto component = std::make_shared<C>(game, *this, std::forward<Args>(args)...);
+			std::weak_ptr<C> componentWeak = component;
+
 			components.push_back(std::move(component));
-			return *static_cast<C*>(components.back().get());
+			return componentWeak;
 		}
 
 		virtual void Update(const float deltaTime);
@@ -39,14 +43,14 @@ namespace Tetris
 		VPVector2 position;
 
 	private:
-		GameObject(Game& game, int id, std::string name);
-		GameObject(Game& game, int id, std::string name, VPVector2 position);
-		GameObject(Game& game, int id, std::string name, float posX, float posY);
+		GameObject(Game& game, int id, std::string& name);
+		GameObject(Game& game, int id, std::string& name, VPVector2 position);
+		GameObject(Game& game, int id, std::string& name, float posX, float posY);
 
 		GameObject(const GameObject&) = delete;
 
 		unsigned const int id;
-		std::vector<std::unique_ptr<Component>> components;
+		std::vector<std::shared_ptr<Component>> components;
 
 		friend class Game;
 	};

@@ -16,10 +16,10 @@ namespace Tetris
 		void StartGame();
 		void StopGame();
 
-		GameObject& CreateGameObject();
-		GameObject& CreateGameObject(std::string name);
-		GameObject& CreateGameObject(VPVector2 position);
-		GameObject& CreateGameObject(std::string name, VPVector2 position);
+		std::weak_ptr<GameObject> CreateGameObject();
+		std::weak_ptr<GameObject> CreateGameObject(std::string& name);
+		std::weak_ptr<GameObject> CreateGameObject(VPVector2 position);
+		std::weak_ptr<GameObject> CreateGameObject(std::string& name, VPVector2 position);
 
 		void DestroyGameObject(GameObject& gameObject);
 		
@@ -29,7 +29,7 @@ namespace Tetris
 
 		unsigned int targetFps = 60;
 	
-		std::vector<std::unique_ptr<GameObject>> gameObjects;
+		std::vector<std::shared_ptr<GameObject>> gameObjects;
 	};
 }
 

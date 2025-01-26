@@ -10,7 +10,10 @@ namespace Tetris
 		SceneRoot(Game& game, GameObject& root) : Component(game, root) { InitScene(); }
 		
 		void InitScene();
-		void Update(float deltaTime) override {}
+		void Update(float deltaTime) override;
+
+		float timer = 2;
+		GameObject* square;
 	};
 }
 

@@ -1,11 +1,9 @@
 #include "Game.h"
 
-#include <raylib.h>
-
 #include "Globals.h"
 #include "SceneRoot.h"
 
-#include <iostream>
+#include <raylib.h>
 
 namespace Tetris
 {
@@ -14,7 +12,7 @@ namespace Tetris
 		InitWindow(600, 800, "Tetris");
 		SetTargetFPS(targetFps);
 
-		CreateGameObject("Root").AddComponent<SceneRoot>();
+		std::weak_ptr<GameObject> root = CreateGameObject("Root");
 
 		GameLoop();
 	}
@@ -30,14 +28,13 @@ namespace Tetris
 			
 			UpdateGlobals();
 
-			//Update
+			//Update loop
 			float deltaTime = GetFrameTime();
 			for (size_t i = 0; i < gameObjects.size(); i++)
 				gameObjects[i]->Update(deltaTime);
 
 			EndDrawing();
 		}
-		
 
 		StopGame();
 	}
@@ -53,42 +50,33 @@ namespace Tetris
 
 	#pragma region CreateGameObject Overloads
 
-	GameObject& Game::CreateGameObject()
+	std::weak_ptr<GameObject> Game::CreateGameObject()
 	{
 		int id = gameObjects.size();
 		std::string name = "Object " + std::to_string(id);
-		GameObject* go = new GameObject(*this, id, name, { 0, 0 });
-		gameObjects.push_back(std::unique_ptr<GameObject>(go));
-		
-		return *go;
+		return CreateGameObject(name, VPVector2(0, 0));
 	}
 
-	GameObject& Game::CreateGameObject(std::string name)
+	std::weak_ptr<GameObject> Game::CreateGameObject(std::string& name)
 	{
-		int id = gameObjects.size();
-		GameObject* go = new GameObject(*this, id, name, { 0, 0 });
-		gameObjects.push_back(std::unique_ptr<GameObject>(go));
-
-		return *go;
+		return CreateGameObject(name, VPVector2(0, 0));
 	}
 
-	GameObject& Game::CreateGameObject(VPVector2 position)
+	std::weak_ptr<GameObject> Game::CreateGameObject(VPVector2 position)
 	{
 		int id = gameObjects.size();
 		std::string name = "Object " + std::to_string(id);
-		GameObject* go = new GameObject(*this, id, name, position);
-		gameObjects.push_back(std::unique_ptr<GameObject>(go));
-
-		return *go;
+		return CreateGameObject(name, position);
 	}
 
-	GameObject& Game::CreateGameObject(std::string name, VPVector2 position)
+	std::weak_ptr<GameObject> Game::CreateGameObject(std::string& name, VPVector2 position)
 	{
 		int id = gameObjects.size();
-		GameObject* go = new GameObject(*this, id, name, position);
-		gameObjects.push_back(std::unique_ptr<GameObject>(go));
+		GameObject go(*this, id, name, position);
+		gameObjects.push_back(std::make_shared<GameObject>(go));
+		std::weak_ptr<GameObject> goWeak = gameObjects.back();
 
-		return *go;
+		return goWeak;
 	}
 
 	#pragma endregion
