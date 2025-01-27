@@ -5,27 +5,27 @@
 
 namespace Tetris
 {
-	GameObject& Object::Create() const
+	std::weak_ptr<GameObject> Object::Create() const
 	{
 		return game.CreateGameObject();
 	}
 
-	GameObject& Object::Create(std::string name) const
+	std::weak_ptr<GameObject> Object::Create(std::string name) const
 	{
 		return game.CreateGameObject(name);
 	}
 
-	GameObject& Object::Create(VPVector2 position) const
+	std::weak_ptr<GameObject> Object::Create(VPVector2 position) const
 	{
 		return game.CreateGameObject(position);
 	}
 
-	GameObject& Object::Create(std::string name, VPVector2 position) const
+	std::weak_ptr<GameObject> Object::Create(std::string name, VPVector2 position) const
 	{
 		return game.CreateGameObject(name, position);
 	}
 
-	void Object::Destroy(GameObject& gameObject) const
+	void Object::Destroy(std::weak_ptr<GameObject> gameObject) const
 	{
 		game.DestroyGameObject(gameObject);
 	}

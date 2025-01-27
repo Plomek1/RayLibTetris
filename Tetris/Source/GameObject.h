@@ -42,10 +42,12 @@ namespace Tetris
 		std::string name;
 		VPVector2 position;
 
+		GameObject(GameObject&& other) = default;
+
 	private:
-		GameObject(Game& game, int id, std::string& name);
-		GameObject(Game& game, int id, std::string& name, VPVector2 position);
-		GameObject(Game& game, int id, std::string& name, float posX, float posY);
+		GameObject(Game& game, const int id, const std::string& name);
+		GameObject(Game& game, const int id, const std::string& name, const VPVector2 position);
+		GameObject(Game& game, const int id, const std::string& name, const float posX, const float posY);
 
 		GameObject(const GameObject&) = delete;
 

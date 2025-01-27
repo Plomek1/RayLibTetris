@@ -4,6 +4,8 @@
 
 namespace Tetris 
 {
+	class TetrisGrid;
+
 	class SceneRoot : public Component
 	{
 	public:
@@ -12,8 +14,7 @@ namespace Tetris
 		void InitScene();
 		void Update(float deltaTime) override;
 
-		float timer = 2;
-		GameObject* square;
+		std::weak_ptr<TetrisGrid> grid;
 	};
 }
 

@@ -17,11 +17,11 @@ namespace Tetris
 		void StopGame();
 
 		std::weak_ptr<GameObject> CreateGameObject();
-		std::weak_ptr<GameObject> CreateGameObject(std::string& name);
-		std::weak_ptr<GameObject> CreateGameObject(VPVector2 position);
-		std::weak_ptr<GameObject> CreateGameObject(std::string& name, VPVector2 position);
+		std::weak_ptr<GameObject> CreateGameObject(const std::string& name);
+		std::weak_ptr<GameObject> CreateGameObject(const VPVector2 position);
+		std::weak_ptr<GameObject> CreateGameObject(const std::string& name, const VPVector2 position);
 
-		void DestroyGameObject(GameObject& gameObject);
+		void DestroyGameObject(std::weak_ptr<GameObject> gameObject);
 		
 	private:
 		void GameLoop();

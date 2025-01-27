@@ -12,7 +12,8 @@ namespace Tetris
 		InitWindow(600, 800, "Tetris");
 		SetTargetFPS(targetFps);
 
-		std::weak_ptr<GameObject> root = CreateGameObject("Root");
+		std::shared_ptr<GameObject> root = CreateGameObject("Root").lock();
+		root->AddComponent<SceneRoot>();
 
 		GameLoop();
 	}
@@ -57,32 +58,33 @@ namespace Tetris
 		return CreateGameObject(name, VPVector2(0, 0));
 	}
 
-	std::weak_ptr<GameObject> Game::CreateGameObject(std::string& name)
+	std::weak_ptr<GameObject> Game::CreateGameObject(const std::string& name)
 	{
 		return CreateGameObject(name, VPVector2(0, 0));
 	}
 
-	std::weak_ptr<GameObject> Game::CreateGameObject(VPVector2 position)
+	std::weak_ptr<GameObject> Game::CreateGameObject(const VPVector2 position)
 	{
 		int id = gameObjects.size();
 		std::string name = "Object " + std::to_string(id);
 		return CreateGameObject(name, position);
 	}
 
-	std::weak_ptr<GameObject> Game::CreateGameObject(std::string& name, VPVector2 position)
+	std::weak_ptr<GameObject> Game::CreateGameObject(const std::string& name, const VPVector2 position)
 	{
 		int id = gameObjects.size();
 		GameObject go(*this, id, name, position);
-		gameObjects.push_back(std::make_shared<GameObject>(go));
-		std::weak_ptr<GameObject> goWeak = gameObjects.back();
-
-		return goWeak;
+		gameObjects.push_back(std::make_shared<GameObject>(std::move(go)));
+		return gameObjects.back();
 	}
 
 	#pragma endregion
 
-	void Game::DestroyGameObject(GameObject& gameObject)
-	{ gameObjects.erase(gameObjects.begin() + gameObject.id); }
+	void Game::DestroyGameObject(std::weak_ptr<GameObject> gameObject)
+	{
+		if (auto go = gameObject.lock())
+		gameObjects.erase(gameObjects.begin() + go->id); 
+	}
 
 	void Game::StopGame()
 	{ CloseWindow(); }

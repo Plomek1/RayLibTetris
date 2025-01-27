@@ -30,7 +30,7 @@ namespace Tetris
 			return GetShape<S>();
 		}
 
-		inline void Update(const float deltaTime) override { shape->Draw(root.position); std::cout << "Alive" << std::endl; }
+		inline void Update(const float deltaTime) override { shape->Draw(root.position); }
 
 	private:
 		std::unique_ptr<Shape> shape;
