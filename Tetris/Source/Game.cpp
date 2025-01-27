@@ -12,8 +12,9 @@ namespace Tetris
 		InitWindow(600, 800, "Tetris");
 		SetTargetFPS(targetFps);
 
-		std::shared_ptr<GameObject> root = CreateGameObject("Root").lock();
-		root->AddComponent<SceneRoot>();
+		UpdateGlobals();
+
+		CreateGameObject("Root").lock()->AddComponent<SceneRoot>();
 
 		GameLoop();
 	}
@@ -26,13 +27,12 @@ namespace Tetris
 		{
 			BeginDrawing();
 			ClearBackground(bgColor);
-			
-			UpdateGlobals();
 
-			//Update loop
+			//Call Update
 			float deltaTime = GetFrameTime();
-			for (size_t i = 0; i < gameObjects.size(); i++)
-				gameObjects[i]->Update(deltaTime);
+			for (auto go : gameObjects) go->Update(deltaTime);
+
+			UpdateGlobals();
 
 			EndDrawing();
 		}

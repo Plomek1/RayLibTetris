@@ -1,7 +1,5 @@
 #include "TetrisGrid.h"
 
-#include "Globals.h"
-
 #include <raylib.h>
 
 namespace Tetris
@@ -13,61 +11,35 @@ namespace Tetris
 
 	GameObject* TetrisGrid::GetCell(const unsigned int index) const
 	{
-		return cells.size() > index ? cells[index] : nullptr;
+		bool indexValid = ValidateIndex(index);
+		return indexValid ? cells[index] : nullptr;
 	}
 
-	GameObject* TetrisGrid::GetCell(const VPVector2 coordinates) const
+	bool TetrisGrid::SetCell(GameObject* gameObject, const unsigned int index)
 	{
-		unsigned int index = GetCellIndex(coordinates);
-		return cells.size() > index ? cells[index] : nullptr;
+		if (ValidateIndex(index))
+		{
+			cells[index] = gameObject;
+			return true;
+		}
+		return false;
 	}
 
-	GameObject* TetrisGrid::GetCell(const unsigned int x, const unsigned int y) const
+	bool TetrisGrid::MoveCell(const unsigned int startIndex, const unsigned int targetIndex)
 	{
-		unsigned int index = GetCellIndex(x, y);
-		return cells.size() > index ? cells[index] : nullptr;
-	}
-
-	void TetrisGrid::SetCell(GameObject* gameObject, const unsigned int index)
-	{
-		if (cells.size() > index) cells[index] = gameObject;
-	}
-
-	void TetrisGrid::SetCell(GameObject* gameObject, const VPVector2 coordinates)
-	{
-		unsigned int index = GetCellIndex(coordinates);
-		if (cells.size() > index) cells[index] = gameObject;
-	}
-
-	void TetrisGrid::SetCell(GameObject* gameObject, const unsigned int x, const unsigned int y)
-	{
-		unsigned int index = GetCellIndex(x, y);
-		if (cells.size() > index) cells[index] = gameObject;
-	}
-
-	void TetrisGrid::MoveCell(const VPVector2 startCoordinates, const VPVector2 targetCoordinates)
-	{
-		int startIndex = GetCellIndex(startCoordinates);
-		GameObject* moveObject = GetCell(startIndex);
-		SetCell(nullptr, startIndex);
-		SetCell(moveObject, targetCoordinates);
-	}
-
-	void TetrisGrid::MoveCell(const unsigned startX, const unsigned startY, const unsigned targetX, const unsigned targetY)
-	{
-		int startIndex = GetCellIndex(startX, startY);
-		GameObject* moveObject = GetCell(startIndex);
-		SetCell(nullptr, startIndex);
-		SetCell(moveObject, targetX, targetY);
+		if (ValidateIndex(startIndex) && ValidateIndex(targetIndex))
+		{
+			GameObject* moveObject = GetCell(startIndex);
+			SetCell(nullptr, startIndex);
+			SetCell(moveObject, targetIndex);
+			return true;
+		}
+		return false;
 	}
 
 	void TetrisGrid::DrawGrid()
 	{
 		if (!drawGrid) return;
-
-		VPVector2 windowSize = Globals::windowParameters.windowSize;
-
-		int cellSize = windowSize.y / gridHeight;
 
 		int lineLength = gridWidth * cellSize;
 		for (int i = 0; i <= gridHeight; i++)

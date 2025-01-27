@@ -24,6 +24,7 @@ namespace Tetris
 			std::weak_ptr<C> componentWeak = component;
 
 			components.push_back(std::move(component));
+			components.back()->Start();
 			return componentWeak;
 		}
 		
@@ -34,10 +35,12 @@ namespace Tetris
 			std::weak_ptr<C> componentWeak = component;
 
 			components.push_back(std::move(component));
+			components.back()->Start();
 			return componentWeak;
 		}
 
-		virtual void Update(const float deltaTime);
+		void Start() override;
+		void Update(float deltaTime) override;
 
 		std::string name;
 		VPVector2 position;

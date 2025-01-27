@@ -5,10 +5,14 @@
 
 namespace Tetris
 {
+	void GameObject::Start()
+	{
+		for (auto c : components) c->Start();
+	}
+
 	void GameObject::Update(const float deltaTime)
 	{
-		for (size_t i = 0; i < components.size(); i++)
-			components[i]->Update(deltaTime);
+		for (auto c : components) c->Update(deltaTime);
 	}
 
 	GameObject::GameObject(Game& game, const int id, const std::string& name)

@@ -21,6 +21,9 @@ namespace Tetris
 		std::weak_ptr<GameObject> Create(std::string name, VPVector2 position) const;
 
 		void Destroy(std::weak_ptr<GameObject> gameObject) const;
+
+		virtual void Start() {}
+		virtual void Update(const float deltaTime) {}
 	
 	private:
 		Game& game;
