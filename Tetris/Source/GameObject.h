@@ -48,13 +48,12 @@ namespace Tetris
 		GameObject(GameObject&& other) = default;
 
 	private:
-		GameObject(Game& game, const int id, const std::string& name);
-		GameObject(Game& game, const int id, const std::string& name, const VPVector2 position);
-		GameObject(Game& game, const int id, const std::string& name, const float posX, const float posY);
+		GameObject(Game& game, const std::string& name);
+		GameObject(Game& game, const std::string& name, const VPVector2 position);
+		GameObject(Game& game, const std::string& name, const float posX, const float posY);
 
 		GameObject(const GameObject&) = delete;
 
-		unsigned const int id;
 		std::vector<std::shared_ptr<Component>> components;
 
 		friend class Game;

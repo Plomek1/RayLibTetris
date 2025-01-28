@@ -30,7 +30,7 @@ namespace Tetris
 
 			//Call Update
 			float deltaTime = GetFrameTime();
-			for (auto go : gameObjects) go->Update(deltaTime);
+			for (size_t i = 0; i < gameObjects.size(); i++) gameObjects[i]->Update(deltaTime);
 
 			UpdateGlobals();
 
@@ -49,41 +49,27 @@ namespace Tetris
 		Globals::windowParameters.mousePos = mousePos;
 	}
 
-	#pragma region CreateGameObject Overloads
-
-	std::weak_ptr<GameObject> Game::CreateGameObject()
-	{
-		int id = gameObjects.size();
-		std::string name = "Object " + std::to_string(id);
-		return CreateGameObject(name, VPVector2(0, 0));
-	}
-
-	std::weak_ptr<GameObject> Game::CreateGameObject(const std::string& name)
-	{
-		return CreateGameObject(name, VPVector2(0, 0));
-	}
-
-	std::weak_ptr<GameObject> Game::CreateGameObject(const VPVector2 position)
-	{
-		int id = gameObjects.size();
-		std::string name = "Object " + std::to_string(id);
-		return CreateGameObject(name, position);
-	}
 
 	std::weak_ptr<GameObject> Game::CreateGameObject(const std::string& name, const VPVector2 position)
 	{
-		int id = gameObjects.size();
-		GameObject go(*this, id, name, position);
+		GameObject go(*this, name, position);
 		gameObjects.push_back(std::make_shared<GameObject>(std::move(go)));
 		return gameObjects.back();
 	}
 
-	#pragma endregion
+	void Game::DestroyGameObject(GameObject& gameObject)
+	{
+		auto at = std::find_if(gameObjects.begin(), gameObjects.end(), [&gameObject](auto go) { return &gameObject == go.get();  });
+		gameObjects.erase(at);
+	}
 
 	void Game::DestroyGameObject(std::weak_ptr<GameObject> gameObject)
 	{
-		if (auto go = gameObject.lock())
-		gameObjects.erase(gameObjects.begin() + go->id); 
+		if (auto p_gameObject = gameObject.lock())
+		{
+			auto at = std::find_if(gameObjects.begin(), gameObjects.end(), [p_gameObject](auto go) { return p_gameObject.get() == go.get();  });
+			gameObjects.erase(at); 
+		}
 	}
 
 	void Game::StopGame()

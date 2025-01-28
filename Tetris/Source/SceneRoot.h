@@ -16,7 +16,9 @@ namespace Tetris
 
 	private:
 		std::weak_ptr<TetrisGrid> grid;
-		std::weak_ptr<Block> square;
+		std::weak_ptr<Block> square1;
+		std::weak_ptr<Block> square2;
+		std::weak_ptr<Block> square3;
 
 		float startTimer = .5;
 		float timer = startTimer;
