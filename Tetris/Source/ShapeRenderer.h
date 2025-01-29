@@ -14,10 +14,10 @@ namespace Tetris
 	class ShapeRenderer : public Component
 	{
 	public:
-		ShapeRenderer(Game& game, GameObject& root) : Component(game, root), shape(std::make_unique<Circle>()) {}
+		ShapeRenderer(Game& game, const uint32_t id, GameObject& root) : Component(game, id, root), shape(std::make_unique<Circle>()) {}
 
 		template <ShapeType S>
-		ShapeRenderer(Game& game, GameObject& root, S&& shape) : Component(game, root), shape(std::make_unique<S>(shape)) {}
+		ShapeRenderer(Game& game, const uint32_t id, GameObject& root, S&& shape) : Component(game, id, root), shape(std::make_unique<S>(shape)) {}
 		
 		template <ShapeType S>
 		inline S& GetShape() const

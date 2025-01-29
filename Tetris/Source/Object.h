@@ -2,7 +2,6 @@
 
 #include "Vector2.h"
 
-#include <memory>
 #include <string>;
 
 namespace Tetris
@@ -12,16 +11,17 @@ namespace Tetris
 
 	class Object
 	{
+	public: 
+		const uint32_t id;
+
 	protected:
-		Object(Game& game) : game(game) {}
+		Object(Game& game, uint32_t id) : game(game), id(id) {}
+		GameObject* Create(const std::string& name = "", uint32_t * gameObjectID = nullptr, VPVector2 position = { 0, 0 }) const;
 
-		std::weak_ptr<GameObject> Create() const;
-		std::weak_ptr<GameObject> Create(const std::string& name) const;
-		std::weak_ptr<GameObject> Create(VPVector2 position) const;
-		std::weak_ptr<GameObject> Create(const std::string& name, VPVector2 position) const;
+		GameObject* Get(uint32_t id);
 
-		void Destroy(GameObject& gameObject) const;
-		void Destroy(std::weak_ptr<GameObject> gameObject) const;
+		void Destroy(GameObject& gameObject);
+		void Destroy(uint32_t gameObjectID);
 
 		virtual void Start() {}
 		virtual void Update(const float deltaTime) {}

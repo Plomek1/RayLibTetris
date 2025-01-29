@@ -9,13 +9,13 @@ namespace Tetris
 		DrawGrid();
 	}
 
-	GameObject* TetrisGrid::GetCell(const unsigned int index) const
+	GameObject* TetrisGrid::GetCell(const uint32_t index) const
 	{
 		bool indexValid = ValidateIndex(index);
 		return indexValid ? cells[index] : nullptr;
 	}
 
-	bool TetrisGrid::SetCell(GameObject* gameObject, const unsigned int index)
+	bool TetrisGrid::SetCell(GameObject* gameObject, const uint32_t index)
 	{
 		if (ValidateIndex(index))
 		{
@@ -25,7 +25,7 @@ namespace Tetris
 		return false;
 	}
 
-	bool TetrisGrid::MoveCell(const unsigned int startIndex, const unsigned int targetIndex)
+	bool TetrisGrid::MoveCell(const uint32_t startIndex, const uint32_t targetIndex)
 	{
 		if (ValidateIndex(startIndex) && ValidateIndex(targetIndex))
 		{

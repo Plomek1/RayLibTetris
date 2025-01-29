@@ -11,8 +11,8 @@ namespace Tetris
 	class Block : public Component
 	{
 	public:
-		Block(Game& game, GameObject& root, std::weak_ptr<TetrisGrid> grid, VPVector2 coordinates, Color color) 
-			: Component(game, root), grid(grid), coordinates(coordinates), color(color) {}
+		Block(Game& game, const uint32_t id, GameObject& root, TetrisGrid* grid, VPVector2 coordinates, Color color) 
+			: Component(game, id, root), grid(grid), coordinates(coordinates), color(color) {}
 
 		void Start() override;
 
@@ -21,7 +21,7 @@ namespace Tetris
 		void Delete();
 
 	private:
-		std::weak_ptr<TetrisGrid> grid;
+		TetrisGrid* grid;
 
 		VPVector2 coordinates {0, 0} ;
 		Color color = WHITE;

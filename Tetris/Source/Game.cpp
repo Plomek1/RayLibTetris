@@ -4,6 +4,7 @@
 #include "SceneRoot.h"
 
 #include <raylib.h>
+#include <iostream>
 
 namespace Tetris
 {
@@ -14,7 +15,7 @@ namespace Tetris
 
 		UpdateGlobals();
 
-		CreateGameObject("Root").lock()->AddComponent<SceneRoot>();
+		CreateGameObject("Root", nullptr, {0, 0})->AddComponent<SceneRoot>();
 
 		GameLoop();
 	}
@@ -33,6 +34,7 @@ namespace Tetris
 			for (size_t i = 0; i < gameObjects.size(); i++) gameObjects[i]->Update(deltaTime);
 
 			UpdateGlobals();
+			Cleanup();
 
 			EndDrawing();
 		}
@@ -49,27 +51,47 @@ namespace Tetris
 		Globals::windowParameters.mousePos = mousePos;
 	}
 
-
-	std::weak_ptr<GameObject> Game::CreateGameObject(const std::string& name, const VPVector2 position)
+	void Game::Cleanup()
 	{
-		GameObject go(*this, name, position);
-		gameObjects.push_back(std::make_shared<GameObject>(std::move(go)));
-		return gameObjects.back();
+		for (uint32_t& objID : objectsToClenup) gameObjects.erase(objID);
+		objectsToClenup.clear();
+	}
+
+	GameObject* Game::CreateGameObject(const std::string& name, uint32_t* gameObjectID, const VPVector2 position)
+	{
+		uint32_t id = nextID++;
+		if (gameObjectID) *gameObjectID = id;
+
+		if (name.length() > 1)
+		{
+			GameObject go(*this, id, name, position);
+			auto p_go = std::make_unique<GameObject>(std::move(go));
+			gameObjects[id] = std::move(p_go);
+		}
+		else
+		{
+			std::string generatedName = "GameObject " + std::to_string(id);
+			GameObject go(*this, id, generatedName, position);
+			auto p_go = std::make_unique<GameObject>(std::move(go));
+			gameObjects[id] = std::move(p_go);
+		}
+		return gameObjects[id].get();
+	}
+
+	GameObject* Game::GetGameObject(uint32_t gameObjectID) const
+	{
+		auto it = gameObjects.find(gameObjectID);
+		return (it != gameObjects.end()) ? it->second.get() : nullptr;
 	}
 
 	void Game::DestroyGameObject(GameObject& gameObject)
 	{
-		auto at = std::find_if(gameObjects.begin(), gameObjects.end(), [&gameObject](auto go) { return &gameObject == go.get();  });
-		gameObjects.erase(at);
+		//objectsToClenup.push_back(gameObject.id);
 	}
 
-	void Game::DestroyGameObject(std::weak_ptr<GameObject> gameObject)
+	void Game::DestroyGameObject(uint32_t gameObjectID)
 	{
-		if (auto p_gameObject = gameObject.lock())
-		{
-			auto at = std::find_if(gameObjects.begin(), gameObjects.end(), [p_gameObject](auto go) { return p_gameObject.get() == go.get();  });
-			gameObjects.erase(at); 
-		}
+		objectsToClenup.push_back(gameObjectID);
 	}
 
 	void Game::StopGame()

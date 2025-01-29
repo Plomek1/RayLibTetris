@@ -9,17 +9,16 @@ namespace Tetris
 	class SceneRoot : public Component
 	{
 	public:
-		SceneRoot(Game& game, GameObject& root) : Component(game, root) {}
+		SceneRoot(Game& game, const uint32_t id, GameObject& root) : Component(game, id, root) {}
 		
 		void Start() override;
 		void Update(float deltaTime) override;
 
 	private:
-		std::weak_ptr<TetrisGrid> grid;
-		std::weak_ptr<Block> square1;
-		std::weak_ptr<Block> square2;
-		std::weak_ptr<Block> square3;
-
+		uint32_t gridGoID = 0;
+		uint32_t gridID = 0;
+		uint32_t squareIDS[3] = { 0, 0, 0 };
+		uint32_t blockIDS[3] = { 0, 0, 0 };
 		float startTimer = .5;
 		float timer = startTimer;
 	};

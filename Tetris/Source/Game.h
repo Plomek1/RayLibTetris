@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 
+#include <unordered_map>
 #include <vector>
 #include <memory>
 
@@ -16,21 +17,21 @@ namespace Tetris
 		void StartGame();
 		void StopGame();
 
-		inline std::weak_ptr<GameObject> CreateGameObject() { return CreateGameObject("GameObject", VPVector2(0, 0)); }
-		inline std::weak_ptr<GameObject> CreateGameObject(const std::string& name) { return CreateGameObject(name, VPVector2(0, 0)); }
-		inline std::weak_ptr<GameObject> CreateGameObject(const VPVector2 position) { return CreateGameObject("GameObject", position); }
-			   std::weak_ptr<GameObject> CreateGameObject(const std::string& name, const VPVector2 position);
+		GameObject* CreateGameObject(const std::string& name, uint32_t* gameObjectID, const VPVector2 position);
+		GameObject* GetGameObject(uint32_t gameObjectID) const;
 
 		void DestroyGameObject(GameObject& gameObject);
-		void DestroyGameObject(std::weak_ptr<GameObject> gameObject);
+		void DestroyGameObject(uint32_t gameObject);
 		
 	private:
 		void GameLoop();
 		void UpdateGlobals();
+		void Cleanup();
 
-		unsigned int targetFps = 60;
-	
-		std::vector<std::shared_ptr<GameObject>> gameObjects;
+		uint32_t targetFps = 60;
+		uint32_t nextID = 0;
+		std::unordered_map<uint32_t, std::unique_ptr<GameObject>> gameObjects;
+		std::vector<uint32_t> objectsToClenup;
 	};
 }
 
