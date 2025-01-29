@@ -16,14 +16,15 @@ namespace Tetris
 
 		void Start() override;
 
+		bool CheckMove(VPVector2 targetCoordinates);
 		bool Move(VPVector2 targetCoordinates);
 		inline bool MoveDown() { return Move(VPVector2(coordinates.x, coordinates.y + 1)); }
+		void Lock();
 		void Delete();
 
+		VPVector2 coordinates {0, 0} ;
 	private:
 		TetrisGrid* grid;
-
-		VPVector2 coordinates {0, 0} ;
 		Color color = WHITE;
 	};
 }

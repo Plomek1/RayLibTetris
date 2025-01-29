@@ -86,7 +86,7 @@ namespace Tetris
 
 	void Game::DestroyGameObject(GameObject& gameObject)
 	{
-		//objectsToClenup.push_back(gameObject.id);
+		objectsToClenup.push_back(gameObject.id); 
 	}
 
 	void Game::DestroyGameObject(uint32_t gameObjectID)

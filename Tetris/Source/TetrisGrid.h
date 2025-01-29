@@ -30,6 +30,10 @@ namespace Tetris
 		inline VPVector2 GetCellWorldPosition(const VPVector2 coordinates) const { return VPVector2(coordinates.x * cellSize, coordinates.y * cellSize); }
 		inline VPVector2 GetCellWorldPosition(const uint32_t x, const uint32_t y) const { return VPVector2(x * cellSize, y * cellSize); }
 
+		inline bool IsInBounds(const uint32_t index) const { return index >= 0 && index < cells.size(); }
+		inline bool IsInBounds(VPVector2 coordinates) { return IsInBounds(GetCellIndex(coordinates)); }
+		inline bool IsInBounds(const uint32_t x, const uint32_t y) { return IsInBounds(GetCellIndex(x, y)); }
+
 		void Update(float deltaTime) override;
 
 		uint32_t cellSize;
@@ -40,7 +44,6 @@ namespace Tetris
 		inline uint32_t GetCellIndex(const VPVector2 coordinates) const { return coordinates.x + coordinates.y * gridWidth; }
 		inline uint32_t GetCellIndex(const uint32_t x, const uint32_t y) const { return x + y * gridWidth; }
 
-		inline bool ValidateIndex(const uint32_t index) const { return index >= 0 && index < cells.size(); }
 
 		unsigned const int gridWidth  = 10;
 		unsigned const int gridHeight = 20;

@@ -11,13 +11,13 @@ namespace Tetris
 
 	GameObject* TetrisGrid::GetCell(const uint32_t index) const
 	{
-		bool indexValid = ValidateIndex(index);
+		bool indexValid = IsInBounds(index);
 		return indexValid ? cells[index] : nullptr;
 	}
 
 	bool TetrisGrid::SetCell(GameObject* gameObject, const uint32_t index)
 	{
-		if (ValidateIndex(index))
+		if (IsInBounds(index))
 		{
 			cells[index] = gameObject;
 			return true;
@@ -27,7 +27,7 @@ namespace Tetris
 
 	bool TetrisGrid::MoveCell(const uint32_t startIndex, const uint32_t targetIndex)
 	{
-		if (ValidateIndex(startIndex) && ValidateIndex(targetIndex))
+		if (IsInBounds(startIndex) && IsInBounds(targetIndex))
 		{
 			GameObject* moveObject = GetCell(startIndex);
 			SetCell(nullptr, startIndex);
