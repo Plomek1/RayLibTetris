@@ -12,8 +12,25 @@ namespace Tetris
 		case PieceType::I:
 			definition = &pieceI;
 			break;
+		case PieceType::J:
+			definition = &pieceJ;
+			break;
+		case PieceType::L:
+			definition = &pieceL;
+			break;
+		case PieceType::O:
+			definition = &pieceO;
+			break;
+		case PieceType::S:
+			definition = &pieceS;
+			break;
+		case PieceType::T:
+			definition = &pieceT;
+			break;
+		case PieceType::Z:
+			definition = &pieceZ;
+			break;
 		}
-		definition = &pieceI;
 
 		for (VPVector2& blockPosition : definition->rotations[0])
 		{
