@@ -17,8 +17,8 @@ namespace Tetris
 		void Start() override;
 
 		bool CheckMove(VPVector2 targetCoordinates);
-		bool Move(VPVector2 targetCoordinates);
-		inline bool MoveDown() { return Move(VPVector2(coordinates.x, coordinates.y + 1)); }
+		void Move(VPVector2 targetCoordinates);
+		inline void MoveDown() { Move(VPVector2(coordinates.x, coordinates.y + 1)); }
 		void Lock();
 		void Delete();
 

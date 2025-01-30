@@ -17,7 +17,7 @@ namespace Tetris
 		return !grid->GetCell(targetCoordinates);
 	}
 
-	bool Block::Move(VPVector2 targetCoordinates)
+	void Block::Move(VPVector2 targetCoordinates)
 	{
 		root.position = grid->GetCellWorldPosition(targetCoordinates);
 		coordinates = targetCoordinates;

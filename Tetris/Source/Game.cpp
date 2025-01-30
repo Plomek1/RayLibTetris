@@ -29,9 +29,11 @@ namespace Tetris
 			BeginDrawing();
 			ClearBackground(bgColor);
 
+			
+
 			//Call Update
 			float deltaTime = GetFrameTime();
-			for (size_t i = 0; i < gameObjects.size(); i++) gameObjects[i]->Update(deltaTime);
+			for (auto& gameObjectPair : gameObjects) gameObjectPair.second->Update(deltaTime);
 
 			UpdateGlobals();
 			Cleanup();

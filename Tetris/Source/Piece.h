@@ -6,15 +6,17 @@
 namespace Tetris
 {
 	class Block;
+	class TetrisGrid;
 
 	class Piece : public Component
 	{
-		Piece(Game& game, const uint32_t id, GameObject& root) : Component(game, id, root){}
-	
 	public:
+		Piece(Game& game, const uint32_t id, GameObject& root, TetrisGrid* grid, VPVector2 coordinates) 
+			: Component(game, id, root), grid(grid), coordinates(coordinates) {}
+	
 		void Start() override;
 
-		bool MovePiece();
+		bool MovePiece(VPVector2 moveDifference = { 0, 1 });
 
 		enum PieceType
 		{
@@ -24,6 +26,8 @@ namespace Tetris
 		PieceType pieceType = I;
 
 	private:
+		TetrisGrid* grid;
+		VPVector2 coordinates;
 		std::vector<Block*> blocks;
 	};
 }
