@@ -1,15 +1,25 @@
 #include "Piece.h"
 
 #include "Block.h"
+#include "PieceDefinitions.h"
 
 namespace Tetris
 {
 	void Piece::Start()
 	{
-		blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, coordinates, YELLOW));
-		blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, VPVector2(coordinates.x, coordinates.y + 1), YELLOW));
-		blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, VPVector2(coordinates.x, coordinates.y + 2), YELLOW));
-		blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, VPVector2(coordinates.x, coordinates.y + 3), YELLOW));
+		switch (pieceType)
+		{
+		case PieceType::I:
+			definition = &pieceI;
+			break;
+		}
+		definition = &pieceI;
+
+		for (VPVector2& blockPosition : definition->rotations[0])
+		{
+			VPVector2 initialCoordinates(coordinates.x + blockPosition.x + definition->spawnOffset.x, coordinates.y + blockPosition.y + definition->spawnOffset.y);
+			blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, initialCoordinates, definition->color));
+		}
 	}
 
 	bool Piece::MovePiece(VPVector2 moveDifference)

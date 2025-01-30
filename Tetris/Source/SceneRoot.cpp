@@ -5,16 +5,18 @@
 #include "Block.h"
 #include "Piece.h"
 
+#include <cstdlib>
 #include <iostream>
 
 namespace Tetris
 {
+	Piece::PieceType nextPieceType = Piece::LAST;
+
 	void SceneRoot::Start()
 	{
-		GameObject* tetrisGrid = Create("Grid", &gridGoID);
-		TetrisGrid* grid = tetrisGrid->AddComponent<TetrisGrid>(&gridID, Globals::windowParameters.windowSize.y / 20);
-
-		Piece* piece = Create("ActivePiece", &activePieceGoID)->AddComponent<Piece>(&activePieceID, grid, VPVector2(2, 0));
+		Create("Grid", &gridGoID)->AddComponent<TetrisGrid>(&gridID, Globals::windowParameters.windowSize.y / 20);
+		nextPieceType = static_cast<Piece::PieceType>(rand() % Piece::LAST);
+		SpawnPiece();
 	}
 
 	void SceneRoot::Update(float deltaTime)
@@ -28,11 +30,19 @@ namespace Tetris
 				if (!piece->MovePiece())
 				{
 					Destroy(piece->root.id);
+					SpawnPiece();
 				}
 			}
 
 
 			timer = startTimer;
 		}
+	}
+	void SceneRoot::SpawnPiece()
+	{
+		TetrisGrid* grid = Get(gridGoID)->GetComponent<TetrisGrid>(gridID);
+
+		Piece* piece = Create("ActivePiece", &activePieceGoID)->AddComponent<Piece>(&activePieceID, grid, VPVector2(2, 0), nextPieceType);
+		nextPieceType = static_cast<Piece::PieceType>(rand() % Piece::LAST);
 	}
 }

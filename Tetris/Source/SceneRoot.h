@@ -4,8 +4,6 @@
 
 namespace Tetris 
 {
-	class TetrisGrid;
-	class Block;
 	class SceneRoot : public Component
 	{
 	public:
@@ -15,12 +13,12 @@ namespace Tetris
 		void Update(float deltaTime) override;
 
 	private:
+		void SpawnPiece();
+
 		uint32_t gridGoID = 0;
+		uint32_t gridID = 0;
 		uint32_t activePieceGoID = 0;
 		uint32_t activePieceID = 0;
-		uint32_t gridID = 0;
-		uint32_t squareIDS[3] = { 0, 0, 0 };
-		uint32_t blockIDS[3] = { 0, 0, 0 };
 		float startTimer = .5;
 		float timer = startTimer;
 	};
