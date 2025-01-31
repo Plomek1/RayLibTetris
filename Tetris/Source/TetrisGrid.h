@@ -11,7 +11,7 @@ namespace Tetris
 	{
 	public:
 		TetrisGrid(Game& game, const uint32_t id, GameObject& root, int cellSize = 16)
-			: Component(game, id, root), cellSize(cellSize), cells(std::vector<GameObject*>(gridHeight * gridWidth)) {}
+			: Component(game, id, root), cellSize(cellSize), cells(std::vector<GameObject*>(height * width)) {}
 
 		GameObject* GetCell(const uint32_t index) const;
 		inline GameObject* GetCell(const VPVector2 coordinates) const 
@@ -37,23 +37,22 @@ namespace Tetris
 		inline bool IsInBounds(const uint32_t index) const 
 		{ return index >= 0 && index < cells.size(); }
 		inline bool IsInBounds(VPVector2 coordinates) const 
-		{ return coordinates.x >= 0 && coordinates.x < gridWidth && coordinates.y >= 0 && coordinates.y < gridHeight; }
+		{ return coordinates.x >= 0 && coordinates.x < width && coordinates.y >= 0 && coordinates.y < height; }
 		inline bool IsInBounds(const uint32_t x, const uint32_t y) const 
-		{ return x >= 0 && x < gridWidth && y >= 0 && y < gridHeight; }
+		{ return x >= 0 && x < width && y >= 0 && y < height; }
 
 		void Update(float deltaTime) override;
 
 		uint32_t cellSize;
 
+		unsigned const int width  = 10;
+		unsigned const int height = 20;
+
 	private:
 		void DrawGrid();
 
-		inline uint32_t GetCellIndex(const VPVector2 coordinates) const { return coordinates.x + coordinates.y * gridWidth; }
-		inline uint32_t GetCellIndex(const uint32_t x, const uint32_t y) const { return x + y * gridWidth; }
-
-
-		unsigned const int gridWidth  = 10;
-		unsigned const int gridHeight = 20;
+		inline uint32_t GetCellIndex(const VPVector2 coordinates) const { return coordinates.x + coordinates.y * width; }
+		inline uint32_t GetCellIndex(const uint32_t x, const uint32_t y) const { return x + y * width; }
 
 		std::vector<GameObject*> cells;
 

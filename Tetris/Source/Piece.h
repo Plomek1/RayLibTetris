@@ -23,12 +23,14 @@ namespace Tetris
 		void Start() override;
 
 		bool Move(VPVector2 direction, bool lock);
-		void Rotate();
+		bool Rotate(bool doWallKick = true);
 
 		
 		PieceType pieceType = I;
 
 	private:
+		void WallKick();
+
 		PieceDefinition* definition = nullptr;
 		TetrisGrid* grid;
 		VPVector2 coordinates;

@@ -45,7 +45,7 @@ namespace Tetris
 	bool Piece::Move(VPVector2 direction, bool lock)
 	{
 		bool moveValid = true;
-		coordinates = VPVector2(coordinates.x + direction.x, coordinates.y + direction.y);
+		
 		for (Block* block : blocks)
 		{
 			if (!block->CheckMove(VPVector2(block->coordinates.x + direction.x, block->coordinates.y + direction.y)))
@@ -57,6 +57,7 @@ namespace Tetris
 
 		if (moveValid)
 		{
+			coordinates = VPVector2(coordinates.x + direction.x, coordinates.y + direction.y);
 			for (Block* block : blocks)
 				block->Move(VPVector2(block->coordinates.x + direction.x, block->coordinates.y + direction.y));
 			return true;
@@ -71,32 +72,51 @@ namespace Tetris
 		return false;
 	}
 
-	void Piece::Rotate()
+	bool Piece::Rotate(bool doWallKick)
 	{
 		std::vector<VPVector2> blockPositions(blocks.size());
 		bool rotationValid = true;
+		bool wallKick = false;
 		int newRotation = (currentRotation + 1) % definition->rotationCount;
 
 		for (size_t i = 0; i < blocks.size(); i++)
 		{
-			VPVector2& blockOffset = definition->rotations[newRotation][i];
-			VPVector2 blockCoordinates(coordinates.x + blockOffset.x, coordinates.y + blockOffset.y);
-			if (blocks[i]->CheckMove(blockCoordinates))
+			if (rotationValid)
 			{
-				blockPositions[i] = blockCoordinates;
-				continue;
+				VPVector2& blockOffset = definition->rotations[newRotation][i];
+				VPVector2 blockCoordinates(coordinates.x + blockOffset.x, coordinates.y + blockOffset.y);
+				if (rotationValid && blocks[i]->CheckMove(blockCoordinates))
+					blockPositions[i] = blockCoordinates;
+				else
+					rotationValid = false;
 			}
 
-			rotationValid = false;
-			break;
+			if (blocks[i]->IsNextToWall()) wallKick = true;
 		}
-		std::cout << "Rotating: " << rotationValid << std::endl;
+		std::cout << "Rotating: " << wallKick << std::endl;
 
 		if (rotationValid)
 		{
 			for (size_t i = 0; i < blocks.size(); i++)
 				blocks[i]->Move(blockPositions[i]);
 			currentRotation = newRotation;
+			return true;
+		}
+		else if (wallKick && doWallKick)
+			WallKick();
+
+		return false;
+	}
+
+	void Piece::WallKick()
+	{
+		for (int i = 1; i <= 2; i++)
+		{
+			bool leftWall = coordinates.x < 5;
+			VPVector2 kick = leftWall ? VPVector2(i, 0) : VPVector2(-i, 0);
+			Move(VPVector2(kick.x, 0), false);
+			if (!Rotate(false)) Move(VPVector2(-kick.x, 0), false);
+			else return;
 		}
 	}
 }

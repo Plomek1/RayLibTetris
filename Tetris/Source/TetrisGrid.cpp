@@ -55,15 +55,15 @@ namespace Tetris
 	{
 		if (!drawGrid) return;
 
-		int lineLength = gridWidth * cellSize;
-		for (int i = 0; i <= gridHeight; i++)
+		int lineLength = width * cellSize;
+		for (int i = 0; i <= height; i++)
 		{
 			int linePosY = i * cellSize;
 			DrawLine(0, linePosY, lineLength, linePosY, GRAY);
 		}
 
-		lineLength = gridHeight * cellSize;
-		for (int i = 0; i <= gridWidth; i++)
+		lineLength = height * cellSize;
+		for (int i = 0; i <= width; i++)
 		{
 			int linePosX = i * cellSize;
 			DrawLine(linePosX, 0, linePosX, lineLength, GRAY);

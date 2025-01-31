@@ -17,6 +17,12 @@ namespace Tetris
 		return !grid->GetCell(targetCoordinates);
 	}
 
+	bool Block::IsNextToWall()
+	{
+		std::cout << "(" << coordinates.x << ", " << coordinates.y << ")\n";
+		return coordinates.x == 0 || coordinates.x == grid->width - 1;
+	}
+
 	void Block::Move(VPVector2 targetCoordinates)
 	{
 		root.position = grid->GetCellWorldPosition(targetCoordinates);
