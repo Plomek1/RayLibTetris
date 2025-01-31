@@ -2,10 +2,10 @@
 
 #include "Globals.h"
 #include "TetrisGrid.h"
-#include "Block.h"
 #include "Piece.h"
 
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 namespace Tetris
@@ -14,6 +14,7 @@ namespace Tetris
 
 	void SceneRoot::Start()
 	{
+		srand(time(0));
 		Create("Grid", &gridGoID)->AddComponent<TetrisGrid>(&gridID, Globals::windowParameters.windowSize.y / 20);
 		nextPieceType = static_cast<Piece::PieceType>(rand() % Piece::LAST);
 		SpawnPiece();

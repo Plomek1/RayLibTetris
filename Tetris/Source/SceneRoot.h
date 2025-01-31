@@ -19,7 +19,7 @@ namespace Tetris
 		uint32_t gridID = 0;
 		uint32_t activePieceGoID = 0;
 		uint32_t activePieceID = 0;
-		float startTimer = .5;
+		float startTimer = .1;
 		float timer = startTimer;
 	};
 }
