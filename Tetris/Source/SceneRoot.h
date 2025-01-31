@@ -13,13 +13,15 @@ namespace Tetris
 		void Update(float deltaTime) override;
 
 	private:
+		void MovePiece(VPVector2 direction, bool lock);
+		void RotatePiece();
 		void SpawnPiece();
 
 		uint32_t gridGoID = 0;
 		uint32_t gridID = 0;
 		uint32_t activePieceGoID = 0;
 		uint32_t activePieceID = 0;
-		float startTimer = .1;
+		float startTimer = .2;
 		float timer = startTimer;
 	};
 }

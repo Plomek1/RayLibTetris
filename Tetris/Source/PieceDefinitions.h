@@ -141,27 +141,11 @@ namespace Tetris
 
 	PieceDefinition pieceS
 	{
-	.rotationCount = 4,
+	.rotationCount = 2,
 	.spawnOffset = VPVector2(0, -1),
 	.color = Color(67,182,67,255),
 	.rotations
 		{
-			std::vector<VPVector2>
-			{
-				VPVector2(0, 2),
-				VPVector2(1, 2),
-				VPVector2(1, 1),
-				VPVector2(2, 1),
-			},
-
-			std::vector<VPVector2>
-			{
-				VPVector2(1, 0),
-				VPVector2(1, 1),
-				VPVector2(2, 1),
-				VPVector2(2, 2),
-			},
-
 			std::vector<VPVector2>
 			{
 				VPVector2(0, 2),
@@ -223,27 +207,11 @@ namespace Tetris
 
 	PieceDefinition pieceZ
 	{
-	.rotationCount = 4,
+	.rotationCount = 2,
 	.spawnOffset = VPVector2(0, -1),
 	.color = Color(238,33,41,255),
 	.rotations
 		{
-			std::vector<VPVector2>
-			{
-				VPVector2(0, 1),
-				VPVector2(1, 1),
-				VPVector2(1, 2),
-				VPVector2(2, 2),
-			},
-
-			std::vector<VPVector2>
-			{
-				VPVector2(2, 0),
-				VPVector2(2, 1),
-				VPVector2(1, 1),
-				VPVector2(1, 2),
-			},
-
 			std::vector<VPVector2>
 			{
 				VPVector2(0, 1),

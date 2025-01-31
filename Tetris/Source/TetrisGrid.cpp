@@ -37,6 +37,20 @@ namespace Tetris
 		return false;
 	}
 
+	bool TetrisGrid::MoveCell(const VPVector2 startCoordinates, const VPVector2 targetCoordinates)
+	{
+		if (IsInBounds(startCoordinates) && IsInBounds(targetCoordinates))
+			return MoveCell(GetCellIndex(startCoordinates), GetCellIndex(targetCoordinates));
+		return false;
+	}
+
+	bool TetrisGrid::MoveCell(const unsigned startX, const unsigned startY, const unsigned targetX, const unsigned targetY)
+	{
+		if (IsInBounds(startX, startY) && IsInBounds(targetX, targetY))
+			return MoveCell(GetCellIndex(startX, startY), GetCellIndex(targetX, startY));
+		return false;
+	}
+
 	void TetrisGrid::DrawGrid()
 	{
 		if (!drawGrid) return;

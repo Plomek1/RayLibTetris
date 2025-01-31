@@ -22,7 +22,8 @@ namespace Tetris
 	
 		void Start() override;
 
-		bool MovePiece(VPVector2 moveDifference = { 0, 1 });
+		bool Move(VPVector2 direction, bool lock);
+		void Rotate();
 
 		
 		PieceType pieceType = I;
@@ -32,6 +33,8 @@ namespace Tetris
 		TetrisGrid* grid;
 		VPVector2 coordinates;
 		std::vector<Block*> blocks;
+
+		int currentRotation = 0;
 	};
 }
 

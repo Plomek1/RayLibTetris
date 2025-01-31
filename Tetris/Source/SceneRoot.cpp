@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <raylib.h>
 
 namespace Tetris
 {
@@ -22,23 +23,45 @@ namespace Tetris
 
 	void SceneRoot::Update(float deltaTime)
 	{
+		if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT))
+			MovePiece(VPVector2(-1, 0), false);
+
+		if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT))
+			MovePiece(VPVector2(1, 0), false);
+
+		if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP))
+			RotatePiece();
+
 		timer -= deltaTime;
 		if (timer <= 0)
 		{
-			if (GameObject* pieceGo = Get(activePieceGoID))
-			{
-				Piece* piece = pieceGo->GetComponent<Piece>(activePieceID);
-				if (!piece->MovePiece())
-				{
-					Destroy(piece->root.id);
-					SpawnPiece();
-				}
-			}
-
-
+			MovePiece(VPVector2(0, 1), true);
 			timer = startTimer;
 		}
 	}
+
+	void SceneRoot::MovePiece(VPVector2 direction, bool lock)
+	{
+		if (GameObject* pieceGo = Get(activePieceGoID))
+		{
+			Piece* piece = pieceGo->GetComponent<Piece>(activePieceID);
+			if (!piece->Move(direction, lock) && lock)
+			{
+				Destroy(piece->root.id);
+				SpawnPiece();
+			}
+		}
+	}
+
+	void SceneRoot::RotatePiece()
+	{
+		if (GameObject* pieceGo = Get(activePieceGoID))
+		{
+			Piece* piece = pieceGo->GetComponent<Piece>(activePieceID);
+			piece->Rotate();
+		}
+	}
+
 	void SceneRoot::SpawnPiece()
 	{
 		TetrisGrid* grid = Get(gridGoID)->GetComponent<TetrisGrid>(gridID);

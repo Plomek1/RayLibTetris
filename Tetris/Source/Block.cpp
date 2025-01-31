@@ -21,7 +21,6 @@ namespace Tetris
 	{
 		root.position = grid->GetCellWorldPosition(targetCoordinates);
 		coordinates = targetCoordinates;
-		std::cout << root.position.x << ", " << root.position.y << std::endl;
 	}
 
 	void Block::Lock()

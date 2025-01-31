@@ -3,6 +3,8 @@
 #include "Block.h"
 #include "PieceDefinitions.h"
 
+#include <iostream>
+
 namespace Tetris
 {
 	void Piece::Start()
@@ -32,19 +34,21 @@ namespace Tetris
 			break;
 		}
 
-		for (VPVector2& blockPosition : definition->rotations[0])
+		coordinates = VPVector2(coordinates.x + definition->spawnOffset.x, coordinates.y + definition->spawnOffset.y);
+		for (VPVector2& blockPosition : definition->rotations[currentRotation])
 		{
-			VPVector2 initialCoordinates(coordinates.x + blockPosition.x + definition->spawnOffset.x, coordinates.y + blockPosition.y + definition->spawnOffset.y);
+			VPVector2 initialCoordinates(coordinates.x + blockPosition.x, coordinates.y + blockPosition.y);
 			blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, initialCoordinates, definition->color));
 		}
 	}
 
-	bool Piece::MovePiece(VPVector2 moveDifference)
+	bool Piece::Move(VPVector2 direction, bool lock)
 	{
 		bool moveValid = true;
+		coordinates = VPVector2(coordinates.x + direction.x, coordinates.y + direction.y);
 		for (Block* block : blocks)
 		{
-			if (!block->CheckMove(VPVector2(block->coordinates.x + moveDifference.x, block->coordinates.y + moveDifference.y)))
+			if (!block->CheckMove(VPVector2(block->coordinates.x + direction.x, block->coordinates.y + direction.y)))
 			{
 				moveValid = false;
 				break;
@@ -54,13 +58,46 @@ namespace Tetris
 		if (moveValid)
 		{
 			for (Block* block : blocks)
-				block->Move(VPVector2(block->coordinates.x + moveDifference.x, block->coordinates.y + moveDifference.y));
+				block->Move(VPVector2(block->coordinates.x + direction.x, block->coordinates.y + direction.y));
 			return true;
 		}
 		
-		for (Block* block : blocks)
-			block->Lock();
+		if (lock)
+		{
+			for (Block* block : blocks)
+				block->Lock();
+		}
+
 		return false;
+	}
+
+	void Piece::Rotate()
+	{
+		std::vector<VPVector2> blockPositions(blocks.size());
+		bool rotationValid = true;
+		int newRotation = (currentRotation + 1) % definition->rotationCount;
+
+		for (size_t i = 0; i < blocks.size(); i++)
+		{
+			VPVector2& blockOffset = definition->rotations[newRotation][i];
+			VPVector2 blockCoordinates(coordinates.x + blockOffset.x, coordinates.y + blockOffset.y);
+			if (blocks[i]->CheckMove(blockCoordinates))
+			{
+				blockPositions[i] = blockCoordinates;
+				continue;
+			}
+
+			rotationValid = false;
+			break;
+		}
+		std::cout << "Rotating: " << rotationValid << std::endl;
+
+		if (rotationValid)
+		{
+			for (size_t i = 0; i < blocks.size(); i++)
+				blocks[i]->Move(blockPositions[i]);
+			currentRotation = newRotation;
+		}
 	}
 }
 
