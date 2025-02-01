@@ -1,6 +1,9 @@
 #include "TetrisGrid.h"
 
+#include "Block.h"
+
 #include <raylib.h>
+#include <iostream>
 
 namespace Tetris
 {
@@ -9,13 +12,13 @@ namespace Tetris
 		DrawGrid();
 	}
 
-	GameObject* TetrisGrid::GetCell(const uint32_t index) const
+	Block* TetrisGrid::GetCell(const uint32_t index) const
 	{
 		bool indexValid = IsInBounds(index);
 		return indexValid ? cells[index] : nullptr;
 	}
 
-	bool TetrisGrid::SetCell(GameObject* gameObject, const uint32_t index)
+	bool TetrisGrid::SetCell(Block* gameObject, const uint32_t index)
 	{
 		if (IsInBounds(index))
 		{
@@ -29,9 +32,9 @@ namespace Tetris
 	{
 		if (IsInBounds(startIndex) && IsInBounds(targetIndex))
 		{
-			GameObject* moveObject = GetCell(startIndex);
+			Block* moveBlock = GetCell(startIndex);
 			SetCell(nullptr, startIndex);
-			SetCell(moveObject, targetIndex);
+			SetCell(moveBlock, targetIndex);
 			return true;
 		}
 		return false;
@@ -49,6 +52,64 @@ namespace Tetris
 		if (IsInBounds(startX, startY) && IsInBounds(targetX, targetY))
 			return MoveCell(GetCellIndex(startX, startY), GetCellIndex(targetX, startY));
 		return false;
+	}
+
+	void TetrisGrid::ClearFullLines()
+	{
+		int linesCleared = 0;
+		int y = height;
+		for (y; y >= 0; y--)
+		{
+			if (IsLineFull(y))
+			{
+				ClearLine(y);
+				linesCleared++;
+				continue;
+			}
+			
+			if (linesCleared > 0)
+				break;
+		}
+		
+		if (linesCleared > 0)
+		{
+			for (y; y >= 0; y--)
+				MoveLine(y, linesCleared);
+		}
+
+		std::cout << linesCleared << std::endl;
+	}
+
+	void TetrisGrid::MoveLine(int y, int yDifference)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (Block* block = GetCell(x, y))
+			{
+				block->Move(VPVector2(x, y + yDifference));
+				block->Lock();
+				SetCell(nullptr, x, y);
+			}
+		}
+	}
+
+	void TetrisGrid::ClearLine(int y)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			Destroy(GetCell(x, y)->root.id);
+			SetCell(nullptr, x, y);
+		}
+	}
+
+	bool TetrisGrid::IsLineFull(int y)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (!GetCell(x, y))
+				return false;
+		}
+		return true;
 	}
 
 	void TetrisGrid::DrawGrid()

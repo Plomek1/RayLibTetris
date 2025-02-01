@@ -7,23 +7,25 @@
 
 namespace Tetris
 {
+	class Block;
+
 	class TetrisGrid : public Component
 	{
 	public:
 		TetrisGrid(Game& game, const uint32_t id, GameObject& root, int cellSize = 16)
-			: Component(game, id, root), cellSize(cellSize), cells(std::vector<GameObject*>(height * width)) {}
+			: Component(game, id, root), cellSize(cellSize), cells(std::vector<Block*>(height * width)) {}
 
-		GameObject* GetCell(const uint32_t index) const;
-		inline GameObject* GetCell(const VPVector2 coordinates) const 
+		Block* GetCell(const uint32_t index) const;
+		inline Block* GetCell(const VPVector2 coordinates) const
 		{ return IsInBounds(coordinates) ? GetCell(GetCellIndex(coordinates)) : nullptr; }
-		inline GameObject* GetCell(const uint32_t x, const uint32_t y) const 
+		inline Block* GetCell(const uint32_t x, const uint32_t y) const
 		{ return IsInBounds(x, y) ? GetCell(GetCellIndex(x, y)) : nullptr; }
 
-		bool SetCell(GameObject* gameObject, const uint32_t index);
-		inline bool SetCell(GameObject* gameObject, const VPVector2 coordinates) 
-		{ return IsInBounds(coordinates) ? SetCell(gameObject, GetCellIndex(coordinates)) : false; }
-		inline bool SetCell(GameObject* gameObject, const uint32_t x, const uint32_t y) 
-		{ return IsInBounds(x, y) ? SetCell(gameObject, GetCellIndex(x, y)) : false; }
+		bool SetCell(Block* block, const uint32_t index);
+		inline bool SetCell(Block* block, const VPVector2 coordinates)
+		{ return IsInBounds(coordinates) ? SetCell(block, GetCellIndex(coordinates)) : false; }
+		inline bool SetCell(Block* block, const uint32_t x, const uint32_t y)
+		{ return IsInBounds(x, y) ? SetCell(block, GetCellIndex(x, y)) : false; }
 
 		bool MoveCell(const uint32_t startIndex, const uint32_t targetIndex);
 		bool MoveCell(const VPVector2 startCoordinates, const VPVector2 targetCoordinates);
@@ -41,6 +43,8 @@ namespace Tetris
 		inline bool IsInBounds(const uint32_t x, const uint32_t y) const 
 		{ return x >= 0 && x < width && y >= 0 && y < height; }
 
+		void ClearFullLines();
+
 		void Update(float deltaTime) override;
 
 		uint32_t cellSize;
@@ -49,12 +53,16 @@ namespace Tetris
 		unsigned const int height = 20;
 
 	private:
+		void MoveLine(int y, int yDifference);
+		void ClearLine(int y);
+		bool IsLineFull(int y);
+
 		void DrawGrid();
 
 		inline uint32_t GetCellIndex(const VPVector2 coordinates) const { return coordinates.x + coordinates.y * width; }
 		inline uint32_t GetCellIndex(const uint32_t x, const uint32_t y) const { return x + y * width; }
 
-		std::vector<GameObject*> cells;
+		std::vector<Block*> cells;
 
 		bool drawGrid = true;
 	};

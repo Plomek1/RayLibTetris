@@ -79,6 +79,8 @@ namespace Tetris
 		bool wallKick = false;
 		int newRotation = (currentRotation + 1) % definition->rotationCount;
 
+		if (newRotation == currentRotation) return true;
+
 		for (size_t i = 0; i < blocks.size(); i++)
 		{
 			if (rotationValid)
@@ -93,7 +95,6 @@ namespace Tetris
 
 			if (blocks[i]->IsNextToWall()) wallKick = true;
 		}
-		std::cout << "Rotating: " << wallKick << std::endl;
 
 		if (rotationValid)
 		{

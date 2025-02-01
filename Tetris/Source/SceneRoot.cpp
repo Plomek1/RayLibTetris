@@ -32,6 +32,8 @@ namespace Tetris
 		if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP))
 			RotatePiece();
 
+		startTimer = IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN) ? .1 : .5;
+
 		timer -= deltaTime;
 		if (timer <= 0)
 		{
@@ -48,6 +50,7 @@ namespace Tetris
 			if (!piece->Move(direction, lock) && lock)
 			{
 				Destroy(piece->root.id);
+				Get(gridGoID)->GetComponent<TetrisGrid>(gridID)->ClearFullLines();
 				SpawnPiece();
 			}
 		}
