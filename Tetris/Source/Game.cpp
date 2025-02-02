@@ -32,7 +32,9 @@ namespace Tetris
 
 			//Call Update
 			float deltaTime = GetFrameTime();
-			for (auto& gameObjectPair : gameObjects) gameObjectPair.second->Update(deltaTime);
+			for (auto gameObjectPair = gameObjects.rbegin(); gameObjectPair != gameObjects.rend(); ++gameObjectPair) {
+				gameObjectPair->second->Update(deltaTime);
+			}
 
 			UpdateGlobals();
 			Cleanup();

@@ -20,6 +20,8 @@ namespace Tetris
 		void RotatePiece();
 		void SpawnPiece();
 
+		void RenderMainText();
+
 		bool gameRunning = false;
 
 		uint32_t gridGoID = 0;
@@ -28,6 +30,7 @@ namespace Tetris
 		uint32_t activePieceID = 0;
 		float startTimer = .3;
 		float timer = 0;
+		int score = 0;
 	};
 }
 

@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <memory>
 
@@ -31,7 +31,7 @@ namespace Tetris
 
 		uint32_t targetFps = 60;
 		uint32_t nextID = 0;
-		std::unordered_map<uint32_t, std::unique_ptr<GameObject>> gameObjects;
+		std::map<uint32_t, std::unique_ptr<GameObject>> gameObjects;
 		std::vector<uint32_t> objectsToClenup;
 	};
 }
