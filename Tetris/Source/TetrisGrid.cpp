@@ -3,7 +3,6 @@
 #include "Block.h"
 
 #include <raylib.h>
-#include <iostream>
 
 namespace Tetris
 {
@@ -54,7 +53,7 @@ namespace Tetris
 		return false;
 	}
 
-	void TetrisGrid::ClearFullLines()
+	int TetrisGrid::ClearFullLines()
 	{
 		int linesCleared = 0;
 		int y = height;
@@ -77,7 +76,19 @@ namespace Tetris
 				MoveLine(y, linesCleared);
 		}
 
-		std::cout << linesCleared << std::endl;
+		return linesCleared;
+	}
+
+	void TetrisGrid::ClearGrid()
+	{
+		for (int i = 0; i < cells.size(); i++)
+		{
+			if (cells[i])
+			{
+				Destroy(cells[i]->root.id);
+				cells[i] = nullptr;
+			}
+		}
 	}
 
 	void TetrisGrid::MoveLine(int y, int yDifference)

@@ -15,14 +15,18 @@ namespace Tetris
 
 	void SceneRoot::Start()
 	{
-		srand(time(0));
 		Create("Grid", &gridGoID)->AddComponent<TetrisGrid>(&gridID, Globals::windowParameters.windowSize.y / 20);
-		nextPieceType = static_cast<Piece::PieceType>(rand() % Piece::LAST);
-		SpawnPiece();
+		//StartGame();
 	}
 
 	void SceneRoot::Update(float deltaTime)
 	{
+		if(!gameRunning)
+		{ 
+			if (IsKeyPressed(KEY_ENTER)) StartGame();
+			return;
+		}
+		
 		if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT))
 			MovePiece(VPVector2(-1, 0), false);
 
@@ -34,12 +38,27 @@ namespace Tetris
 
 		startTimer = IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN) ? .1 : .5;
 
-		timer -= deltaTime;
-		if (timer <= 0)
+		timer += deltaTime;
+		if (timer >= startTimer)
 		{
 			MovePiece(VPVector2(0, 1), true);
-			timer = startTimer;
+			timer = 0;
 		}
+	}
+
+	void SceneRoot::StartGame()
+	{
+		srand(time(0));
+		Get(gridGoID)->GetComponent<TetrisGrid>(gridID)->ClearGrid();
+		nextPieceType = static_cast<Piece::PieceType>(rand() % Piece::LAST);
+		SpawnPiece();
+		gameRunning = true;
+	}
+
+	void SceneRoot::GameOver()
+	{
+		std::cout << "GAME OVER\n";
+		gameRunning = false;
 	}
 
 	void SceneRoot::MovePiece(VPVector2 direction, bool lock)
@@ -69,7 +88,7 @@ namespace Tetris
 	{
 		TetrisGrid* grid = Get(gridGoID)->GetComponent<TetrisGrid>(gridID);
 
-		Piece* piece = Create("ActivePiece", &activePieceGoID)->AddComponent<Piece>(&activePieceID, grid, VPVector2(2, 0), nextPieceType);
+		Piece* piece = Create("ActivePiece", &activePieceGoID)->AddComponent<Piece>(&activePieceID, grid, VPVector2(3, 0), nextPieceType);
 		nextPieceType = static_cast<Piece::PieceType>(rand() % Piece::LAST);
 	}
 }

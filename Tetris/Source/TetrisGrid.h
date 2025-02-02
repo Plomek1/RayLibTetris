@@ -43,7 +43,8 @@ namespace Tetris
 		inline bool IsInBounds(const uint32_t x, const uint32_t y) const 
 		{ return x >= 0 && x < width && y >= 0 && y < height; }
 
-		void ClearFullLines();
+		int ClearFullLines();
+		void ClearGrid();
 
 		void Update(float deltaTime) override;
 

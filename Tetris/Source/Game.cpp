@@ -4,7 +4,6 @@
 #include "SceneRoot.h"
 
 #include <raylib.h>
-#include <iostream>
 
 namespace Tetris
 {
@@ -84,6 +83,16 @@ namespace Tetris
 	{
 		auto it = gameObjects.find(gameObjectID);
 		return (it != gameObjects.end()) ? it->second.get() : nullptr;
+	}
+
+	GameObject* Game::GetGameObject(const std::string& name) const
+	{
+		for (auto& gameObjectPair : gameObjects)
+		{
+			if (gameObjectPair.second->name == name)
+				return gameObjectPair.second.get();
+		}
+		return nullptr;
 	}
 
 	void Game::DestroyGameObject(GameObject& gameObject)

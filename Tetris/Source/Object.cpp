@@ -11,6 +11,10 @@ namespace Tetris
 	GameObject* Object::Get(uint32_t id)
 	{ return game.GetGameObject(id); }
 
+	GameObject* Object::Get(const std::string & name)
+	{ return game.GetGameObject(name); }
+
+
 	void Object::Destroy(GameObject& gameObject)
 	{ game.DestroyGameObject(gameObject); }
 

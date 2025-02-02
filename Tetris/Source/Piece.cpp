@@ -1,9 +1,9 @@
 #include "Piece.h"
 
+#include "TetrisGrid.h"
 #include "Block.h"
 #include "PieceDefinitions.h"
-
-#include <iostream>
+#include "SceneRoot.h"
 
 namespace Tetris
 {
@@ -35,10 +35,35 @@ namespace Tetris
 		}
 
 		coordinates = VPVector2(coordinates.x + definition->spawnOffset.x, coordinates.y + definition->spawnOffset.y);
+
+		int blocksCount = definition->rotations[currentRotation].size();
+		std::vector<VPVector2> blockPositions(blocksCount);
+		bool gameOver = false;
+
+		int i = 0;
 		for (VPVector2& blockPosition : definition->rotations[currentRotation])
 		{
 			VPVector2 initialCoordinates(coordinates.x + blockPosition.x, coordinates.y + blockPosition.y);
-			blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, initialCoordinates, definition->color));
+
+			if (grid->GetCell(initialCoordinates))
+			{
+				gameOver = true;
+				break;
+			}
+
+			blockPositions[i] = initialCoordinates;
+			i++;
+		}
+
+		if (gameOver)
+		{
+			for (Block* block : blocks) Destroy(block->root.id);
+			Get("Root")->GetComponent<SceneRoot>()->GameOver();
+		}
+		else
+		{
+			for (int i = 0; i < blocksCount; i++)
+				blocks.push_back(Create("Block")->AddComponent<Block>(nullptr, grid, blockPositions[i], definition->color));
 		}
 	}
 

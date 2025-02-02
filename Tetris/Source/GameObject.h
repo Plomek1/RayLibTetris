@@ -46,6 +46,16 @@ namespace Tetris
 			return (it != components.end()) ? dynamic_cast<C*>(it->second.get()) : nullptr;
 		}
 
+		template <ComponentChild C>
+		inline C* GetComponent()
+		{
+			for (auto& componentPair : components)
+			{
+				C* c = dynamic_cast<C*>(componentPair.second.get());
+				if (c) return c;
+			}
+		}
+
 		void Start() override;
 		void Update(float deltaTime) override;
 

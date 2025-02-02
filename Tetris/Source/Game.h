@@ -19,6 +19,7 @@ namespace Tetris
 
 		GameObject* CreateGameObject(const std::string& name, uint32_t* gameObjectID, const VPVector2 position);
 		GameObject* GetGameObject(uint32_t gameObjectID) const;
+		GameObject* GetGameObject(const std::string& name) const;
 
 		void DestroyGameObject(GameObject& gameObject);
 		void DestroyGameObject(uint32_t gameObject);
