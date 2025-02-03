@@ -1,8 +1,11 @@
 # About the project
 Tetris clone made with RayLib
 
-![Gameplay screenshot 1](Images/Scr1.png)
-![Gameplay screenshot 2](Images/Scr2.png)
+
+<p float="left" allign="middle">
+  <img src="/Images/Scr1.png" width="200" />
+  <img src="/Images/Scr2.png" width="200" />
+</p>
 
 # Getting started
 Run Setup.exe (Windows only) and open the solution in Visual Studio.
