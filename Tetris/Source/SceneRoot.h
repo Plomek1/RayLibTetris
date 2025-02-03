@@ -21,7 +21,7 @@ namespace Tetris
 		void SpawnPiece();
 
 		void RenderMainText();
-		void RenderScore();
+		void RenderGameplayText();
 
 		bool gameRunning = false;
 

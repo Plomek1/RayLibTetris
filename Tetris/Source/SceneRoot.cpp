@@ -6,14 +6,11 @@
 
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
 #include <raylib.h>
 
 namespace Tetris
 {
 	Piece::PieceType nextPieceType = Piece::LAST;
-
-	//TODO: Score, Next piece
 
 	void SceneRoot::Start()
 	{
@@ -50,7 +47,7 @@ namespace Tetris
 			timer = 0;
 		}
 
-		RenderScore();
+		RenderGameplayText();
 	}
 
 	void SceneRoot::StartGame()
@@ -65,7 +62,6 @@ namespace Tetris
 
 	void SceneRoot::GameOver()
 	{
-		std::cout << "GAME OVER\n";
 		gameRunning = false;
 	}
 
@@ -105,7 +101,6 @@ namespace Tetris
 				}
 				else
 					combo = 0;
-				
 			}
 		}
 	}
@@ -158,7 +153,7 @@ namespace Tetris
 		}
 	}
 
-	void SceneRoot::RenderScore()
+	void SceneRoot::RenderGameplayText()
 	{
 		std::string text = std::to_string(score);
 		int fontSize = 20;
@@ -167,5 +162,45 @@ namespace Tetris
 		int posX = Globals::windowParameters.windowSize.x * .666 + (Globals::windowParameters.windowSize.x * .333 - textSize) * .5;
 
 		DrawText(text.c_str(), posX, Globals::windowParameters.windowSize.y * .5, fontSize, WHITE);
+
+		text = "Next piece:";
+		fontSize = 20;
+
+		textSize = MeasureText(text.c_str(), fontSize);
+		posX = Globals::windowParameters.windowSize.x * .666 + (Globals::windowParameters.windowSize.x * .333 - textSize) * .5;
+
+		DrawText(text.c_str(), posX, Globals::windowParameters.windowSize.y * .25, fontSize, WHITE);
+
+		switch (nextPieceType)
+		{
+		case Tetris::Piece::I:
+			text = "I";
+			break;
+		case Tetris::Piece::J:
+			text = "J";
+			break;
+		case Tetris::Piece::L:
+			text = "L";
+			break;
+		case Tetris::Piece::O:
+			text = "O";
+			break;
+		case Tetris::Piece::S:
+			text = "S";
+			break;
+		case Tetris::Piece::T:
+			text = "T";
+			break;
+		case Tetris::Piece::Z:
+			text = "Z";
+			break;
+		}
+
+		fontSize = 35;
+
+		textSize = MeasureText(text.c_str(), fontSize);
+		posX = Globals::windowParameters.windowSize.x * .666 + (Globals::windowParameters.windowSize.x * .333 - textSize) * .5;
+
+		DrawText(text.c_str(), posX, Globals::windowParameters.windowSize.y * .28, fontSize, WHITE);
 	}
 }
