@@ -46,10 +46,11 @@ namespace Tetris
 		if (timer >= startTimer)
 		{
 			MovePiece(VPVector2(0, 1), true);
+			score++;
 			timer = 0;
 		}
 
-		score++;
+		RenderScore();
 	}
 
 	void SceneRoot::StartGame()
@@ -76,8 +77,35 @@ namespace Tetris
 			if (!piece->Move(direction, lock) && lock)
 			{
 				Destroy(piece->root.id);
-				Get(gridGoID)->GetComponent<TetrisGrid>(gridID)->ClearFullLines();
 				SpawnPiece();
+				
+				int clearedLines = Get(gridGoID)->GetComponent<TetrisGrid>(gridID)->ClearFullLines();
+				if (clearedLines > 0)
+				{
+					switch (clearedLines)
+					{
+					case 1:
+						score += 100;
+						break;
+					case 2:
+						score += 300;
+						break;
+					case 3:
+						score += 500;
+						break;
+					case 4:
+						score += 800;
+						break;
+					}
+
+					combo++;
+
+					if (combo > 1)
+						score += combo * 50;
+				}
+				else
+					combo = 0;
+				
 			}
 		}
 	}
@@ -128,5 +156,16 @@ namespace Tetris
 
 			DrawText(text, posX, Globals::windowParameters.windowSize.y * .33, fontSize, WHITE);
 		}
+	}
+
+	void SceneRoot::RenderScore()
+	{
+		std::string text = std::to_string(score);
+		int fontSize = 20;
+
+		int textSize = MeasureText(text.c_str(), fontSize);
+		int posX = Globals::windowParameters.windowSize.x * .666 + (Globals::windowParameters.windowSize.x * .333 - textSize) * .5;
+
+		DrawText(text.c_str(), posX, Globals::windowParameters.windowSize.y * .5, fontSize, WHITE);
 	}
 }

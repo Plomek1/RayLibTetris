@@ -21,6 +21,7 @@ namespace Tetris
 		void SpawnPiece();
 
 		void RenderMainText();
+		void RenderScore();
 
 		bool gameRunning = false;
 
@@ -30,6 +31,7 @@ namespace Tetris
 		uint32_t activePieceID = 0;
 		float startTimer = .3;
 		float timer = 0;
+		int combo = 0;
 		int score = 0;
 	};
 }
